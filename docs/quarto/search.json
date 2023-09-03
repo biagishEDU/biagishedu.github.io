@@ -1,0 +1,65 @@
+[
+  {
+    "objectID": "posts/welcome/index.html",
+    "href": "posts/welcome/index.html",
+    "title": "Welcome To My Blog",
+    "section": "",
+    "text": "This is the first post in a Quarto blog. Welcome!\n\nSince this post doesn’t specify an explicit image, the first image in the post will be used in the listing page of posts.\nI have now added to this too."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Quarto Blog",
+    "section": "",
+    "text": "Post With Code\n\n\n\n\n\n\n\nnews\n\n\ncode\n\n\nanalysis\n\n\n\n\n\n\n\n\n\n\n\nAug 31, 2023\n\n\nHarlow Malloc\n\n\n\n\n\n\n  \n\n\n\n\nWelcome To My Blog\n\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\n\n\n\n\nAug 28, 2023\n\n\nTristan O’Malley\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "Finley Malloc",
+    "section": "",
+    "text": "Finley Malloc is the Chief Data Scientist at Wengo Analytics. When not innovating on data platforms, Finley enjoys spending time unicycling and playing with her pet iguana.\n\n\nUniversity of California, San Diego | San Diego, CA PhD in Mathematics | Sept 2011 - June 2015\nMacalester College | St. Paul MA B.A in Economics | Sept 2007 - June 2011\n\n\n\nWengo Analytics | Head Data Scientist | April 2018 - present\nGeoScynce | Chief Analyst | Sept 2012 - April 2018\n\n \n  \n   \n  \n    \n     twitter\n  \n  \n    \n     Github"
+  },
+  {
+    "objectID": "about.html#education",
+    "href": "about.html#education",
+    "title": "Finley Malloc",
+    "section": "",
+    "text": "University of California, San Diego | San Diego, CA PhD in Mathematics | Sept 2011 - June 2015\nMacalester College | St. Paul MA B.A in Economics | Sept 2007 - June 2011"
+  },
+  {
+    "objectID": "about.html#experience",
+    "href": "about.html#experience",
+    "title": "Finley Malloc",
+    "section": "",
+    "text": "Wengo Analytics | Head Data Scientist | April 2018 - present\nGeoScynce | Chief Analyst | Sept 2012 - April 2018"
+  },
+  {
+    "objectID": "posts/post-with-code/index.html",
+    "href": "posts/post-with-code/index.html",
+    "title": "Post With Code",
+    "section": "",
+    "text": "This is a post with executable code. (Python Added)\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "posts/post-with-code/index.html#this-is-a-header-2",
+    "href": "posts/post-with-code/index.html#this-is-a-header-2",
+    "title": "Post With Code",
+    "section": "",
+    "text": "This is a post with executable code. (Python Added)\n\n1 + 1\n\n[1] 2\n\n\n```{python}\nthis_list = [1,2,3,4,5]\nprint(max(this_list))\n```"
+  },
+  {
+    "objectID": "posts/post-with-code/index.html#section-1",
+    "href": "posts/post-with-code/index.html#section-1",
+    "title": "Post With Code",
+    "section": "1.1",
+    "text": "1.1\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ac auctor augue mauris augue. Velit euismod in pellentesque massa placerat duis ultricies lacus sed. Egestas sed sed risus pretium quam. Morbi tristique senectus et netus. Cursus metus aliquam eleifend mi in. Justo donec enim diam vulputate. Adipiscing elit duis tristique sollicitudin nibh sit amet commodo. In fermentum et sollicitudin ac orci phasellus. Ut morbi tincidunt augue interdum. Nisl vel pretium lectus quam id leo in. Tincidunt dui ut ornare lectus sit amet est placerat in. Cursus sit amet dictum sit amet justo. Egestas integer eget aliquet nibh praesent.\nTempor id eu nisl nunc mi ipsum faucibus vitae aliquet. Eu tincidunt tortor aliquam nulla facilisi cras fermentum odio eu. Convallis aenean et tortor at risus viverra adipiscing. Fringilla est ullamcorper eget nulla facilisi. Porta non pulvinar neque laoreet suspendisse interdum consectetur libero. In mollis nunc sed id semper risus in hendrerit gravida. Quam id leo in vitae turpis massa sed elementum. Nullam non nisi est sit amet facilisis. Porttitor rhoncus dolor purus non enim praesent elementum facilisis leo. Imperdiet dui accumsan sit amet nulla facilisi. Ac felis donec et odio pellentesque.\n\n1.1.1\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ac auctor augue mauris augue. Velit euismod in pellentesque massa placerat duis ultricies lacus sed. Egestas sed sed risus pretium quam. Morbi tristique senectus et netus. Cursus metus aliquam eleifend mi in. Justo donec enim diam vulputate. Adipiscing elit duis tristique sollicitudin nibh sit amet commodo. In fermentum et sollicitudin ac orci phasellus. Ut morbi tincidunt augue interdum. Nisl vel pretium lectus quam id leo in. Tincidunt dui ut ornare lectus sit amet est placerat in. Cursus sit amet dictum sit amet justo. Egestas integer eget aliquet nibh praesent.\nTempor id eu nisl nunc mi ipsum faucibus vitae aliquet. Eu tincidunt tortor aliquam nulla facilisi cras fermentum odio eu. Convallis aenean et tortor at risus viverra adipiscing. Fringilla est ullamcorper eget nulla facilisi. Porta non pulvinar neque laoreet suspendisse interdum consectetur libero. In mollis nunc sed id semper risus in hendrerit gravida. Quam id leo in vitae turpis massa sed elementum. Nullam non nisi est sit amet facilisis. Porttitor rhoncus dolor purus non enim praesent elementum facilisis leo. Imperdiet dui accumsan sit amet nulla facilisi. Ac felis donec et odio pellentesque."
+  },
+  {
+    "objectID": "posts/post-with-code/index.html#section-4",
+    "href": "posts/post-with-code/index.html#section-4",
+    "title": "Post With Code",
+    "section": "2.1",
+    "text": "2.1\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ac auctor augue mauris augue. Velit euismod in pellentesque massa placerat duis ultricies lacus sed. Egestas sed sed risus pretium quam. Morbi tristique senectus et netus. Cursus metus aliquam eleifend mi in. Justo donec enim diam vulputate. Adipiscing elit duis tristique sollicitudin nibh sit amet commodo. In fermentum et sollicitudin ac orci phasellus. Ut morbi tincidunt augue interdum. Nisl vel pretium lectus quam id leo in. Tincidunt dui ut ornare lectus sit amet est placerat in. Cursus sit amet dictum sit amet justo. Egestas integer eget aliquet nibh praesent.\nTempor id eu nisl nunc mi ipsum faucibus vitae aliquet. Eu tincidunt tortor aliquam nulla facilisi cras fermentum odio eu. Convallis aenean et tortor at risus viverra adipiscing. Fringilla est ullamcorper eget nulla facilisi. Porta non pulvinar neque laoreet suspendisse interdum consectetur libero. In mollis nunc sed id semper risus in hendrerit gravida. Quam id leo in vitae turpis massa sed elementum. Nullam non nisi est sit amet facilisis. Porttitor rhoncus dolor purus non enim praesent elementum facilisis leo. Imperdiet dui accumsan sit amet nulla facilisi. Ac felis donec et odio pellentesque.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ac auctor augue mauris augue. Velit euismod in pellentesque massa placerat duis ultricies lacus sed. Egestas sed sed risus pretium quam. Morbi tristique senectus et netus. Cursus metus aliquam eleifend mi in. Justo donec enim diam vulputate. Adipiscing elit duis tristique sollicitudin nibh sit amet commodo. In fermentum et sollicitudin ac orci phasellus. Ut morbi tincidunt augue interdum. Nisl vel pretium lectus quam id leo in. Tincidunt dui ut ornare lectus sit amet est placerat in. Cursus sit amet dictum sit amet justo. Egestas integer eget aliquet nibh praesent.\nTempor id eu nisl nunc mi ipsum faucibus vitae aliquet. Eu tincidunt tortor aliquam nulla facilisi cras fermentum odio eu. Convallis aenean et tortor at risus viverra adipiscing. Fringilla est ullamcorper eget nulla facilisi. Porta non pulvinar neque laoreet suspendisse interdum consectetur libero. In mollis nunc sed id semper risus in hendrerit gravida. Quam id leo in vitae turpis massa sed elementum. Nullam non nisi est sit amet facilisis. Porttitor rhoncus dolor purus non enim praesent elementum facilisis leo. Imperdiet dui accumsan sit amet nulla facilisi. Ac felis donec et odio pellentesque."
+  }
+]
