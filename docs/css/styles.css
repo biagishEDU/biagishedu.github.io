@@ -601,6 +601,11 @@ progress {
   content: "— ";
 }
 
+.img-me {
+  max-width: 30%;
+  height: auto;
+}
+
 .img-fluid {
   max-width: 100%;
   height: auto;
@@ -11113,7 +11118,11 @@ body {
 
 .about-section {
   padding-top: 10rem;
-  background: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.9) 75%, rgba(0, 0, 0, 0.8) 100%);
+  background: url(../assets/img/bg-milkyway\(3\).png), linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.9) 75%, rgba(0, 0, 0, 0.8) 100%);
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-size: contain;
+  
 }
 .about-section p {
   margin-bottom: 5rem;

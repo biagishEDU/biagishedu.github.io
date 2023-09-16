@@ -9,9 +9,9 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "",
+    "title": "Projects",
     "section": "",
-    "text": "Post With Code\n\n\n\n\n\n\n\nnews\n\n\ncode\n\n\nanalysis\n\n\n\n\n\n\n\n\n\n\n\nAug 31, 2023\n\n\nHarlow Malloc\n\n\n\n\n\n\n  \n\n\n\n\nWelcome To My Blog\n\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\n\n\n\n\nAug 28, 2023\n\n\nTristan O’Malley\n\n\n\n\n\n\nNo matching items"
+    "text": "Order By\n       Default\n         \n          Title\n        \n         \n          Date - Oldest\n        \n         \n          Date - Newest\n        \n         \n          Author\n        \n     \n  \n\n\n\n\n  \n\n\n\n\nPost With Code\n\n\n\n\n\n\n\nnews\n\n\ncode\n\n\nanalysis\n\n\n\n\n\n\n\n\n\n\n\nAug 31, 2023\n\n\nHarlow Malloc\n\n\n\n\n\n\n  \n\n\n\n\nWelcome To My Blog\n\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\n\n\n\n\nAug 28, 2023\n\n\nTristan O’Malley\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "about.html",
@@ -40,13 +40,6 @@
     "title": "Post With Code",
     "section": "",
     "text": "This is a post with executable code. (Python Added)\n1 + 1\n\n[1] 2"
-  },
-  {
-    "objectID": "posts/post-with-code/index.html#this-is-a-header-2",
-    "href": "posts/post-with-code/index.html#this-is-a-header-2",
-    "title": "Post With Code",
-    "section": "",
-    "text": "This is a post with executable code. (Python Added)\n\n1 + 1\n\n[1] 2\n\n\n```{python}\nthis_list = [1,2,3,4,5]\nprint(max(this_list))\n```"
   },
   {
     "objectID": "posts/post-with-code/index.html#section-1",
