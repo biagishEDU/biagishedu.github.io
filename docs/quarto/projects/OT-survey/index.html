@@ -73,7 +73,7 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
-    <a class="navbar-brand" href="https://startbootstrap.github.io/startbootstrap-grayscale/">
+    <a class="navbar-brand" href="https://biagishedu.github.io/web-portfolio/">
     <span class="navbar-title">Shayne Biagi</span>
     </a>
   </div>
@@ -141,7 +141,7 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="what-is-the-optimal-transport-problem" class="level1">
 <h1>What is the Optimal Transport Problem?</h1>
-<p><img src="optimalTransport.png" class="img-fluid"></p>
+<p><img src="optimalTransport3D.jpg" class="img-fluid"></p>
 <p>First, let us begin with a general, or low-level, definition of the optimal transport problem. The most common explanation for this problem is as follows: Assume that you have dug a hole in the ground of <span class="math inline">\(X\)</span> cubic feet. And you now also have a pile of dirt with an exact volume of <span class="math inline">\(X\)</span> cubic feet. Now, consider a naïve method of filling the hole with all of the dirt you have accumulated in the pile. In order to fill this hole, you would have to move every individual dirt particle a certain distance from some location in the pile to some location in the hole. Once all particles have been moved, you will have filled your hole.</p>
 <p>So, how would we define the optimality of our solution? To understand optimality in this case, we need to have some notion of cost for our solution. For this simple case, we can define cost quite simply. Let the cost of moving a single dirt particle be the distance this particle moves when it is picked up from the dirt pile and placed in the hole. We can quantify this as the euclidean distance from any given particle’s source location to its destination. So now, with our definition of cost, an optimal method of transporting all particles of dirt from the pile to the hole will be the one which minimizes the total cost incurred by transporting all particles. Thus, to have optimal transport, we have to minimize the total distance traveled by all particles in the set when filling the hole.</p>
 <p>This is the most basic version of the optimal transport problem. It is essentially an extension of finding a minimum cost matching. Consider this problem as matching every source location of a dirt particle to some destination location in the most cost-optimal manner. Once we have found the minimum cost matching between the sets of source and destination locations, we have found the optimal transport plan.</p>
