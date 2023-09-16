@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Pierre Sarabamoun">
+<meta name="author" content="Shaunak Juvekar">
+<meta name="author" content="Shayne Biagi">
+<meta name="author" content="Shrikanth Upadhayaya">
+<meta name="author" content="Srujan Vithalani">
+<meta name="dcterms.date" content="2023-05-23">
+
+<title>Shayne Biagi - Ethics of Intelligent Government Surveillance Systems</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="https://startbootstrap.github.io/startbootstrap-grayscale/">
+    <span class="navbar-title">Shayne Biagi</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools ms-auto">
+    <a href="../../index.html" rel="" title="index.html" class="quarto-navigation-tool px-1" aria-label="index.html"><i class="bi bi-house-fill"></i></a>
+    <a href="https://github.com/biagishEDU" rel="" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Ethics of Intelligent Government Surveillance Systems</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">ethics</div>
+                <div class="quarto-category">machine learning</div>
+                <div class="quarto-category">data analytics</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Authors</div>
+      <div class="quarto-title-meta-contents">
+               <p>Pierre Sarabamoun </p>
+               <p>Shaunak Juvekar </p>
+               <p>Shayne Biagi </p>
+               <p>Shrikanth Upadhayaya </p>
+               <p>Srujan Vithalani </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">May 23, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#abstract" id="toc-abstract" class="nav-link active" data-scroll-target="#abstract">Abstract</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#literature-survey" id="toc-literature-survey" class="nav-link" data-scroll-target="#literature-survey">Literature Survey</a>
+  <ul class="collapse">
+  <li><a href="#predictive-policing" id="toc-predictive-policing" class="nav-link" data-scroll-target="#predictive-policing">Predictive Policing</a></li>
+  <li><a href="#social-credit-systems" id="toc-social-credit-systems" class="nav-link" data-scroll-target="#social-credit-systems">Social Credit Systems</a></li>
+  </ul></li>
+  <li><a href="#real-world-applications" id="toc-real-world-applications" class="nav-link" data-scroll-target="#real-world-applications">Real-World Applications</a>
+  <ul class="collapse">
+  <li><a href="#pasco-country-sheriff-department-florida" id="toc-pasco-country-sheriff-department-florida" class="nav-link" data-scroll-target="#pasco-country-sheriff-department-florida">Pasco Country Sheriff Department (Florida)</a>
+  <ul class="collapse">
+  <li><a href="#description" id="toc-description" class="nav-link" data-scroll-target="#description">Description</a></li>
+  <li><a href="#community-impact" id="toc-community-impact" class="nav-link" data-scroll-target="#community-impact">Community Impact</a></li>
+  <li><a href="#ethical-implications" id="toc-ethical-implications" class="nav-link" data-scroll-target="#ethical-implications">Ethical Implications</a></li>
+  <li><a href="#uniqueness" id="toc-uniqueness" class="nav-link" data-scroll-target="#uniqueness">Uniqueness</a></li>
+  <li><a href="#broader-view" id="toc-broader-view" class="nav-link" data-scroll-target="#broader-view">Broader View</a></li>
+  </ul></li>
+  <li><a href="#chinese-social-credit-system" id="toc-chinese-social-credit-system" class="nav-link" data-scroll-target="#chinese-social-credit-system">Chinese Social Credit System</a>
+  <ul class="collapse">
+  <li><a href="#description-1" id="toc-description-1" class="nav-link" data-scroll-target="#description-1">Description</a></li>
+  <li><a href="#community-impact-1" id="toc-community-impact-1" class="nav-link" data-scroll-target="#community-impact-1">Community Impact</a></li>
+  <li><a href="#ethical-implications-1" id="toc-ethical-implications-1" class="nav-link" data-scroll-target="#ethical-implications-1">Ethical Implications</a></li>
+  <li><a href="#uniqueness-1" id="toc-uniqueness-1" class="nav-link" data-scroll-target="#uniqueness-1">Uniqueness</a></li>
+  <li><a href="#broader-view-1" id="toc-broader-view-1" class="nav-link" data-scroll-target="#broader-view-1">Broader View</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  <li><a href="#future-directions" id="toc-future-directions" class="nav-link" data-scroll-target="#future-directions">Future Directions</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p><img src="socialCredit.png" class="img-fluid"></p>
+<section id="abstract" class="level1">
+<h1>Abstract</h1>
+<p>Predictive policing and social credit systems have been gaining attention due to their potential to enhance public safety and security. However, the implementation of such systems raises several ethical and social concerns. In this paper, we analyze two case studies: the Pasco County Sheriff Department’s predictive policing in Florida, and the Chinese Social Credit System. We discuss the ethical implications, community impact, uniqueness, and broader view of these systems to draw conclusions on the challenges in ensuring the ethical use of automated systems for predictive policing and social credit scoring.</p>
+</section>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>In recent years, advancements in artificial intelligence (AI) and big data analytics have led to the development of predictive policing and social credit systems <a href="#references">[11]</a>. These systems are designed to improve public safety, reduce crime, and foster trust within communities by analyzing data to predict and prevent criminal behavior, as well as to evaluate citizens’ social and financial behavior. By doing so, they enable the development of robust policing strategies and tactics to address crime. Governments and law enforcement agencies worldwide have adopted these technologies, aiming to leverage their potential benefits <a href="#references">[1]</a>.</p>
+<p>Techniques used in predictive policing include data mining, crime mapping, geospatial prediction, and social network analysis. These methods can be used to anticipate localized crime spikes, inform city and neighborhood planning, and aid in police management decisions. The use of predictive models in law enforcement has shown promising results in the optimal deployment of resources to prevent and reduce crimes <a href="#references">[12]</a>.</p>
+<p>While automated systems such as predictive policing hold great potential to bring about positive changes in the law enforcement industry,<a href="#references">[7]</a> their deployment also raises significant ethical concerns. These include the perpetuation of historical biases and privacy violations <a href="#references">[4]</a>. As a result, it is imperative to carefully examine and address these ethical issues and challenges to ensure that the use of such systems incentivizes better behavior and upholds the fundamental values of justice and fairness.</p>
+<p>This paper aims to examine the ethical challenges involved in using automated systems for predictive policing and social credit scoring. By analyzing two case studies—the first, on Pasco County Sheriff Department’s Intelligence-Led Policing (ILP) program in Florida for predictive policing, and the Chinese Social Credit System for social credit—we explore the community impact, ethical implications, unique features, and broader view of these systems.</p>
+<p>Through our analysis, we hope to contribute to the ongoing discussion on the ethical use of AI and big data in the context of predictive policing and social credit systems, ultimately offering recommendations for future implementations.</p>
+</section>
+<section id="literature-survey" class="level1">
+<h1>Literature Survey</h1>
+<section id="predictive-policing" class="level2">
+<h2 class="anchored" data-anchor-id="predictive-policing">Predictive Policing</h2>
+<p>The rise of big data systems and machine learning has led to an increase in the use of predictive policing techniques <a href="#references">[10]</a>. Despite its growing popularity, predictive policing has yielded mixed results due to several challenges, such as the loss of context in predictive analysis, the lack of transparency in the models used, and ethical concerns regarding privacy and data collection <a href="#references">[14]</a>.</p>
+<p>Two well-known predictive policing programs, LASER and PredPol, serve as examples. While LASER aimed to identify areas with a high likelihood of gun violence <a href="#references">[6]</a>, PredPol focused on calculating hotspots for property-related crimes. LASER was shut down in 2019 due to significant consistency issues discovered through an internal audit. A common issue with these programs is the lack of transparency; many police departments do not disclose the information or technology used to generate their predictive policing systems.</p>
+<p>Critics argue that predictive policing could threaten rights protected by the Fourth Amendment, which requires “reasonable suspicion” for law enforcement actions <a href="#references">[5]</a>. However, proponents contend that predictive tools make it easier for police to identify reasonably suspicious individuals <a href="#references">[8]</a>. Another concern is the phenomenon of “tech-washing,” where racially biased policing methods are given the appearance of objectivity due to the use of computer algorithms. This is especially problematic when algorithms trained on historical data perpetuate existing biases. The ultimate goal of predictive policing is to transition law enforcement from a reactive to a proactive stance, emphasizing crime prevention rather than merely responding to incidents <a href="#references">[7]</a>.</p>
+</section>
+<section id="social-credit-systems" class="level2">
+<h2 class="anchored" data-anchor-id="social-credit-systems">Social Credit Systems</h2>
+<p>China’s Social Credit System (SCS) is a prime example of the ethical challenges associated with Social Credit Systems. The SCS monitors the behavior of all citizens and enterprises, assigning social credit scores based on their actions. Individuals who violate laws are placed on an online “blacklist,” while trustworthy individuals are placed on a “red list.” Both lists are publicly accessible, and various restrictions can be imposed based on social credit scores, such as financial or legal penalties for failing to pay taxes or attend court summons <a href="#references">[3]</a>.</p>
+<p>The SCS has a psychological basis; by displaying rule breakers online, it holds them accountable, while those on the red list serve as models for others. However, the system raises concerns about the potential erosion of individual free will, which could lead to citizens feeling constrained or controlled. This, in turn, may result in growing unease and resentment, potentially culminating in civil unrest or even revolution.</p>
+</section>
+</section>
+<section id="real-world-applications" class="level1">
+<h1>Real-World Applications</h1>
+<p>Detailed in this section are real-world examples of predictive policing and social credit systems. Per each system detailed, subsections for a brief description, their impact on the community, relevant ethical implications, unique features and the broader view of the system at hand follow.</p>
+<section id="pasco-country-sheriff-department-florida" class="level2">
+<h2 class="anchored" data-anchor-id="pasco-country-sheriff-department-florida">Pasco Country Sheriff Department (Florida)</h2>
+<section id="description" class="level3">
+<h3 class="anchored" data-anchor-id="description">Description</h3>
+<p>The Pasco County Sheriff Department instituted <em>The Intelligence-Led Policing Section</em> (ILP) on June 14, 2011. Initially established as a group to “advance the agency’s crime fighting initiatives to a modern-day philosophy”, after much controversy the program was discontinued sometime between 2021 and 2022 <a href="#references">[13]</a>.</p>
+<p>This program implemented a predictive policing system which attempted to catch potential criminal offenders before they would, supposedly, commit a crime. Under this program, the potential offenders were denoted as <em>prolific offenders</em>. The Sheriff Department maintained a list of said <em>prolific offenders</em> that they deemed were likely to commit crimes in the future. According to a “crude computer algorithm”, members of the community would be placed on this list based on factors including a person’s criminal record, whether they have been suspected of a crime, whether they have witnessed a crime, or even whether they were a victim of a crime <a href="#references">[9]</a>.</p>
+<p>In addition to the aforementioned <em>prolific offenders</em> list, an investigation by the <em>Tampa Bay Times</em> has also revealed the use and maintenance of an <em>at-risk</em> students list by the Pasco Country Sheriff Department <a href="#references">[9]</a>. According to the agency’s internal intelligence manual, factors such as grade point average, attendance, involvement in a custody dispute, or even, again, being a victim of a personal crime, all played a role in students being placed on said list. The school districts provide much of this sensitive and private data to the Sheriff Department with full access, raising legal concerns of data privacy. The Pasco Sheriff Office was no longer allowed to access student data post May 3, 2021.</p>
+</section>
+<section id="community-impact" class="level3">
+<h3 class="anchored" data-anchor-id="community-impact">Community Impact</h3>
+<p>Once placed onto the <em>prolific offenders</em> list, people were subject to intimidation and harassment by officers of the police department instructed to monitor and gather information on their subjects. Officers would show up unannounced to homes to even interrogate friends and families of listed peoples, unnecessarily harassing innocent civilians in the process. When met with uncooperative subjects, officers would also cite them egregious amounts, typically in the thousands, for frivolous property code violations such as having tall grass or missing house numbers <a href="#references">[15]</a>. A former Pasco County deputy described that the department had ordered them to “make their lives miserable until they move or sue” <a href="#references">[15]</a>. Community members are being forced out of their homes by constant fear of harassment from the police department. This is a conscious action by the department, suspected to be in hopes of lowering crime rate in the area. And as seen above, not only are the listed peoples subject to this, but innocent relatives and friends too.</p>
+<p>Regarding the <em>at-risk</em> students list, in the summer following the initial implementation of this list, school resource officers were reported to make “hundreds of home visits to at-risk kids”, offering support to children and families, but also questioning them of local crimes and even making arrests of kids who had violated probation or curfew orders <a href="#references">[2]</a>. The intelligence manual also reportedly encouraged officers to work relationships with to students to discover “seeds of criminal activity” and collect information accordingly. Unfortunately, since the students are unable to know whether or not they have been flagged as <em>at-risk</em> it is difficult to fully evaluate the effects of such a system on the student population. Though, if this list is used at all similarly to the <em>prolific offenders</em> list, we can expect that listed students are likely suffering from similar harassment by school resource and correctional officers alike.</p>
+</section>
+<section id="ethical-implications" class="level3">
+<h3 class="anchored" data-anchor-id="ethical-implications">Ethical Implications</h3>
+<p>An ethical issue paramount to such a predictive policing system as described is discrimination. With a predictive policing system based on data from an already discriminatory criminal justice system, the usage of such a system only works to perpetuate the same injustices. The criminal justice system in the United States disproportionately targets those of minority ethnic groups and low income. So, the predictive policing system of Pasco County follows and targets the same marginalized groups of people. Additionally, a further ethical concern arises when even those with no criminal history, but have simply been suspected of a crime, are also subject to unwarranted harassment. By definition, this is discrimination towards those suspected of a crime, even though they may have been found innocent. With regards to the <em>at-risk</em> students list, discrimination towards those involved in custody disputes is also a concern, as it could be seen as discrimination based on family status <a href="#references">[2]</a>. Policing should be ethical and lack any forms of discrimination, and these predictive systems undermine those essential characteristics.</p>
+<p>In addition to discrimination, predictive policing in the United States raises concerns of violating constitutional rights to protection against unreasonable searches and seizures, protected under the Fourth Amendment. Specifically, when Pasco County officers show up unwarranted to homes with the goals of collecting information, homeowners have the right to refuse and ask the officers to leave. When the officers continue to poke and prod them without a warrant or any reasonable suspicion, they violate the homeowner’s Fourth Amendment rights <a href="#references">[15]</a>. Also, when harassing family members and friends of those on the <em>prolific offenders</em> list, officers violate the constitutional right to freedom of association, protected by the First Amendment, as well as the right to not be punished for another’s actions, protected under the Due Process Clause of the Fourteenth Amendment <a href="#references">[15]</a>. As citizens of the United States, we can reasonable expect government officials to act in accordance with our constitutional rights. However, the predictive policing tactics of Pasco County do exactly the opposite, making it entirely unethical.</p>
+</section>
+<section id="uniqueness" class="level3">
+<h3 class="anchored" data-anchor-id="uniqueness">Uniqueness</h3>
+<p>The Pasco County case in predictive policing is unique in its revealed integration of school performance data and abuse history in its policing efforts towards children. According to the Pasco Sheriff’s Office Intelligence Manual, children which have recorded to have witnessed or experienced household violence of even gotten a D or an F in school are factors which make a child much more likely to become a criminal. This was an effort to identify future criminals in the youth population of a school system <a href="#references">[2]</a>. This supposedly led to numerous interventions with at-risk students in the summer following the implementation of the <em>at-risk</em> students list. School resource officers have also been reportedly praised for contributing to intelligence briefings and filing field interview reports on interactions with <em>at-risk</em> kids <a href="#references">[2]</a>. This form of investigation into children for their likelihood to become criminals is unprecedented, as far as the public knows.</p>
+<p>Although identifying students at risk of dropout or failure in school has seen much implementation throughout history, the usage of school data in policing has only recently been brought to light. Because of the intention to keep these programs secret from the public, the only case of such a system brought into the public eye was that of Pasco County, detailed above. There are likely multiple other implementations of a similar system which have not yet been revealed, but to the public’s knowledge, this is the only pertinent case.</p>
+</section>
+<section id="broader-view" class="level3">
+<h3 class="anchored" data-anchor-id="broader-view">Broader View</h3>
+<p>Generally, the public has conveyed great disdain towards Pasco County’s implementation and usage of a predictive policing system. Affected members of the community have worked closely with investigative journalists and law corporations in order to publicize their grievances and fight for their constitutional rights. This case has realized the exact fears which the public has already had on algorithm-assisted policing efforts. And the vast number of new outlets which have picked up reporting on the case supports this.</p>
+<p>Additionally, this case, specifically, has led to the involvement of the federal government in investigating the suspected injustices of such a system, with the Department of Education uptaking an investigation into the usage of school data by the Pasco County Sheriff Office. This conveys a necessity for change as a result of public outrage. Citizens do not want their constitutional rights to be breached, so they are rightfully upset when a case like this arises.</p>
+</section>
+</section>
+<section id="chinese-social-credit-system" class="level2">
+<h2 class="anchored" data-anchor-id="chinese-social-credit-system">Chinese Social Credit System</h2>
+<section id="description-1" class="level3">
+<h3 class="anchored" data-anchor-id="description-1">Description</h3>
+<p>The Chinese Social Credit System is a system put in place and developed by the Chinese government that allows for the monitoring and the rating of it’s citizens. This rating system uses artificial intelligence, big data analytics, personal reportings, and surveillance technologies to get information about individuals to rate their level of trustworthiness as citizens <a href="#references">[3]</a>. The information they use includes financial information, online activities, social behavior, and even their physical movements.This score affects every area of the individual’s life, from travel, to loans, to job opportunities, and even to their right to express themselves and their opinions online <a href="#references">[3]</a>. This system has been in development for almost a decade now but is expected to be fully implemented and operational by 2025.</p>
+</section>
+<section id="community-impact-1" class="level3">
+<h3 class="anchored" data-anchor-id="community-impact-1">Community Impact</h3>
+<p>The Social Credit System’s (SCS) implementation has had a profound impact on Chinese society, both positive and negative. On the one hand, the implementation of the SCS shoots for complete accountability and because of this it has helped to reduce crime rates, promote financial transparency, and even increase social cohesion by rewarding good behavior and punishing bad behavior. An example of this is that “good” citizens, those with a high score which indicates a high level of trustworthiness, get to enjoy discounted services and priority access to public resources while “bad” citizens face travel restrictions, high insurance premiums, and even social stigma. On the other hand, the system is criticized, understandably, for being intrusive, discriminatory, and (maybe most importantly) prone to abuse. There are also fears that this system gives the government the ability to silence dissent, punish minorities, and restrict personal freedoms. Another negative aspect of the SCS is that it creates a culture of fear and mistrust where people are constantly watching their behavior and that of others in order to avoid negative consequences.</p>
+</section>
+<section id="ethical-implications-1" class="level3">
+<h3 class="anchored" data-anchor-id="ethical-implications-1">Ethical Implications</h3>
+<p>The Social Credit System raises a number of ethical questions related to privacy, fairness, and accountability. Regarding privacy, there are concerns since the system collects and analyzes a very large amount of personal data without clear consent or oversight <a href="#references">[3]</a>. This opens the opportunity to profile and discriminate against individuals based on their beliefs, ethnicity, or even social status. These issues raise concerns about the people’s right to privacy, autonomy, and due process because the citizens graded by this system may not have access to the information used to calculate their score, or the ability to contest it’s accuracy. From the fairness perspective, the system, as all models/algorithms are, is prone to reinforcing existing biases and inequalities. This would lead to giving advantages to those who are already privileged while punishing those who are marginalized or vulnerable. This raises questions about social justice, equality, and even human dignity since citizens can be judged based on factors they cannot control such as their family background, medical history, or political affiliations. From an accountability perspective, the system completely lacks transparency and oversight. The lack of independent oversight makes the system prone to corruption, abuse, and errors.</p>
+</section>
+<section id="uniqueness-1" class="level3">
+<h3 class="anchored" data-anchor-id="uniqueness-1">Uniqueness</h3>
+<p>While there are semi-similar systems for generating scores to quantify an individual’s trustworthiness in a specific area, such as the credit score system in the United States, the Social Credit System in China is unique in several ways both in terms of technical features and social implications. Technically, it represents a new paradigm of surveillance and control to reshape individual and collective behavior through a combination of digital technologies, behavioral sciences, and social engineering. It relies on a massive network of data sources which are used to track and monitor citizens in real time and in all aspects of their lives <a href="#references">[3]</a>. From a social perspective, it attempts to redefine the relationship between the state it’s citizens. It aims to make social trustworthiness a key criteria for participation in society.</p>
+</section>
+<section id="broader-view-1" class="level3">
+<h3 class="anchored" data-anchor-id="broader-view-1">Broader View</h3>
+<p>There are many different and well accepted ways of quantifying an individual’s trustworthiness in a specific area. From credit score used for your financial trustworthiness to ride sharing companies like Uber using a scoring system to evaluate drivers, however nothing has come close to attempting to score complete trustworthiness as a citizen. The Chinese Social Credit System attempts to do this because the idea of complete accountability, especially with such a large population, would be very beneficial to the state. The issue with implementing any system this vast with such an effect on people’s lives is that there must be independent oversight as well as transparency on how the score is generated. Any less and you have an all powerful system that is incredibly prone to corruption and abuse. In addition, to collect that data you are taking away all of your citizens’ right to privacy as well as creating a culture and atmosphere of fear among your population since every one of their actions is being observed, recorded, and scored.</p>
+</section>
+</section>
+</section>
+<section id="conclusion" class="level1">
+<h1>Conclusion</h1>
+<p>We have looked at various factors and challenges in the ethical use of automated systems for predictive policing and social credit scoring in this paper. Although their potential in both of these scenarios is undisputed, we still need to address underlying issues related to privacy, transparency and biases present in the systems. We saw some major issues in two different predictive policing scenarios. In the LASER project, historical biases, lack of context and transparency ultimately led to project shutdown. Concerning the Pasco County case, we see that abuse of power by the authorities and the failure of the predictive algorithm motivated people to undertake massive protests against the system.</p>
+<p>The Social Credit System (SCS) is helping China achieve financial transparency, reduce crime and increase social cohesion amongst its population. However, this comes at the cost of privacy, discrimination and restriction of personal freedom. In a way, this is an oppressive and dictatorial manner of controlling the entire population of a country and can hinder creativity and freedom of expression, both of which are essential qualities to a nation’s progress.</p>
+</section>
+<section id="future-directions" class="level1">
+<h1>Future Directions</h1>
+<p>From this work, we believe that future research should be in developing a model for automated decision making systems that can function without the ethical concerns associated with predictive policing and social credit. To create a better framework for the future, all stakeholders must acknowledge the importance of privacy, the need to eliminate discrimination in the algorithms being developed, and address various other issues.</p>
+<p>Future work must consider ways to de-bias the automated algorithms used in predictive policing. This includes methods for mitigating biases in predictive policing algorithms, such as novel techniques for bias detection and correction, as well as the integration of fairness-aware machine learning algorithms to ensure that these systems do not perpetuate existing inequalities. We should also investigate the potential benefits and drawbacks of adopting open-source approaches to predictive policing software. This would allow for greater public scrutiny and facilitate ongoing evaluation of the efficacy and fairness of these tools. Future work can also consider methods for holding both developers and law enforcement agencies accountable for the deployment and consequences of predictive policing systems.</p>
+<p>As for social credit, further research is needed to understand the long-term psychological and societal effects of social credit systems, particularly in terms of public trust, individual privacy, and the potential for social unrest. This could involve both quantitative and qualitative studies that explore the experiences of communities subjected to social credit and the attitudes of the government when using these tools. Finally, as a complement to social credit and predictive policing, we can also consider alternative approaches which do not involve automated decision making. By comparing the efficacy and ethical implications of these approaches, researchers can contribute to the development of a more holistic understanding of how we can prevent crime.</p>
+</section>
+<section id="references" class="level1">
+<h1>References</h1>
+<p>[1] 179. Predictive policing explained, Apr 2020.<br>
+[2] Neil Bedi and Kathleen McGrory. Pasco’s sheriff labels kids potential criminals with grades, abuse history. Tampa Bay Times, Nov 2020.<br>
+[3] Eunsun Cho. The social credit system: Not just another chinese idiosyncrasy. Journal of Public and International Affairs, 2020.<br>
+[4] Jeremy Davis, Duncan Purves, Juan Gilbert, and Schuyler Sturm. Five ethical challenges facing data-driven policing. AI and Ethics, 2(1):185–198, Feb 2022.<br>
+[5] Ángel Díaz. Data-driven policing’s threat to our constitutional rights, Sep 2021.<br>
+[6] Tim Lau. Predictive policing explained. Brennan Center of Justice, 2020.<br>
+[7] Kevin Macnish, David Wright, and Tilimbe Jiya. Predictive Policing in 2025: A Scenario, pages 199–215. Springer International Publishing, Cham, 2020.<br>
+[8] Margo McGehee. Predictive policing technology: Fourth amendment and public policy concerns, Jul 2022.<br>
+[9] Kathleen McGrory and Neil Bedi. A futuristic data policing program is harassing pasco county families. Tampa Bay Times, Sep 2020.<br>
+[10] Albert Meijer and Martijn Wessels. Predictive policing: Review of benefits and drawbacks. International Journal of Public Administration, 42(12):1031–1039, 2019.<br>
+[11] Beth Pearsall. Predictive policing: The future of law enforcement?<br>
+[12] Walter L. Perry, Brian McInnis, Carter C. Price, Susan Smith, and John S. Hollywood. Predictive Policing: Forecasting Crime for Law Enforcement. RAND Corporation, Santa Monica, CA, 2013.<br>
+[13] Dan Sullivan and Matt Cohen. Pasco sheriff discontinues controversial intelligence program, court documents say. Tampa Bay Times, Mar 2023.<br>
+[14] Simone Tulumello and Fabio Iapaolo. Policing the future, disrupting urban policy today. predictive policing, smart city, and urban policy in memphis (tn). Urban Geography, 43(3):448–469, 2022.<br>
+[15] J. Justin Wilson. Pasco predictive policing. Institute for Justice, Jan 2023.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

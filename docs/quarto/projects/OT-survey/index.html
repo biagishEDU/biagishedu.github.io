@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Shayne Biagi">
+<meta name="dcterms.date" content="2022-12-16">
 
-<title>Shayne Biagi - Finley Malloc</title>
+<title>Shayne Biagi - What is the Optimal Transport Problem?</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,20 +25,21 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -58,10 +61,12 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 </head>
 
-<body class="nav-fixed fullcontent">
+<body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -73,7 +78,7 @@ ul.task-list li input[type="checkbox"] {
     </a>
   </div>
         <div class="quarto-navbar-tools ms-auto">
-    <a href="./index.html" rel="" title="index.html" class="quarto-navigation-tool px-1" aria-label="index.html"><i class="bi bi-house-fill"></i></a>
+    <a href="../../index.html" rel="" title="index.html" class="quarto-navigation-tool px-1" aria-label="index.html"><i class="bi bi-house-fill"></i></a>
     <a href="https://github.com/biagishEDU" rel="" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
 </div>
           <div id="quarto-search" class="" title="Search"></div>
@@ -81,56 +86,71 @@ ul.task-list li input[type="checkbox"] {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">What is the Optimal Transport Problem?</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">optimal transport</div>
+                <div class="quarto-category">transport theory</div>
+                <div class="quarto-category">mathematics</div>
+                <div class="quarto-category">statistics</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Shayne Biagi </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">December 16, 2022</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#what-is-the-optimal-transport-problem" id="toc-what-is-the-optimal-transport-problem" class="nav-link active" data-scroll-target="#what-is-the-optimal-transport-problem">What is the Optimal Transport Problem?</a></li>
+  <li><a href="#approximate-optimal-transport-problems" id="toc-approximate-optimal-transport-problems" class="nav-link" data-scroll-target="#approximate-optimal-transport-problems">Approximate Optimal Transport Problems</a></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
-<section id="this-content-appears-above-the-formatted-about-page-content." class="level3">
-<h3>This content appears above the formatted about page content.</h3>
-<div class="quarto-about-jolla">
-  <img src="profile.jpg" class="about-image
-  round " style="height: 15em; width: 15em;">
- <header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Finley Malloc</h1>
-</div>
-<div class="quarto-title-meta">
-  </div>
-</header><div id="hero-heading">
-<p>Finley Malloc is the Chief Data Scientist at Wengo Analytics. When not innovating on data platforms, Finley enjoys spending time unicycling and playing with her pet iguana.</p>
-<section id="education" class="level2">
-<h2 data-anchor-id="education">Education</h2>
-<p>University of California, San Diego | San Diego, CA PhD in Mathematics | Sept 2011 - June 2015</p>
-<p>Macalester College | St.&nbsp;Paul MA B.A in Economics | Sept 2007 - June 2011</p>
+
+<section id="what-is-the-optimal-transport-problem" class="level1">
+<h1>What is the Optimal Transport Problem?</h1>
+<p><img src="optimalTransport.png" class="img-fluid"></p>
+<p>First, let us begin with a general, or low-level, definition of the optimal transport problem. The most common explanation for this problem is as follows: Assume that you have dug a hole in the ground of <span class="math inline">\(X\)</span> cubic feet. And you now also have a pile of dirt with an exact volume of <span class="math inline">\(X\)</span> cubic feet. Now, consider a naïve method of filling the hole with all of the dirt you have accumulated in the pile. In order to fill this hole, you would have to move every individual dirt particle a certain distance from some location in the pile to some location in the hole. Once all particles have been moved, you will have filled your hole.</p>
+<p>So, how would we define the optimality of our solution? To understand optimality in this case, we need to have some notion of cost for our solution. For this simple case, we can define cost quite simply. Let the cost of moving a single dirt particle be the distance this particle moves when it is picked up from the dirt pile and placed in the hole. We can quantify this as the euclidean distance from any given particle’s source location to its destination. So now, with our definition of cost, an optimal method of transporting all particles of dirt from the pile to the hole will be the one which minimizes the total cost incurred by transporting all particles. Thus, to have optimal transport, we have to minimize the total distance traveled by all particles in the set when filling the hole.</p>
+<p>This is the most basic version of the optimal transport problem. It is essentially an extension of finding a minimum cost matching. Consider this problem as matching every source location of a dirt particle to some destination location in the most cost-optimal manner. Once we have found the minimum cost matching between the sets of source and destination locations, we have found the optimal transport plan.</p>
+<p>Now, some may ask, why do we even worry about such a problem? In another post, I go further in-depth on some possible applications of optimal transport theory. But before I do, here is the gist of it. In mathematics, more specifically statistics, computing the distance between probability distributions intuitively has been a large obstacle. Distance in the statistic sense can take very different forms. One of the most popular definitions of a statistical distance is the Kullback-Leibler divergence. Although the most popular, this divergence is not the most desirable. This divergence is not symmetric and may even result in an infinite divergence in some cases. Therefore, the KL divergence is quite undesirable and unintuitive. With optimal transport theory, researchers look to develop a more intuitive and desirable form of statistical distance. That is why this problem is of such importance.</p>
+<p>Finally, let us wrap up by extending the dirt pile and hole example to probability distributions. What would be the optimal transport plan of transforming a probability distribution <span class="math inline">\(A\)</span> to probability distribution <span class="math inline">\(B\)</span>? Conceptualize <span class="math inline">\(A\)</span> as a 2-dimensional pile of dirt, the shape of which resembles the shape of the respective probability distribution. Additionally, conceptualize <span class="math inline">\(B\)</span> as a 2-dimensional hole, the shape of which resembles the shape of the respective probability distribution. Now, we can “transform” distribution <span class="math inline">\(A\)</span> into distribution <span class="math inline">\(B\)</span> by simply placing the “dirt” from <span class="math inline">\(A\)</span> to the hole from <span class="math inline">\(B\)</span>. The cost can be defined the same way as in our dirt pile example. When the total cost of transport is at its minimum, we have found the optimal transport plan. Intuitively, we can see that these are similar problems. Note that, if the two distributions are discrete, this problem can be solved in a manner similar to that mentioned above. However, in the case that the two distributions are continuous, the procedure is slightly different. In this case, we would have to compute the optimal transport between samples of the distributions. For <span class="math inline">\(n\)</span> samples, each sample would be assigned a weight of <span class="math inline">\(1/n\)</span>, and then the optimal transport between the samples would be computed. When all sample points are equally weighted, the problem is known as the assignment problem.</p>
 </section>
-<section id="experience" class="level2">
-<h2 data-anchor-id="experience">Experience</h2>
-<p>Wengo Analytics | Head Data Scientist | April 2018 - present</p>
-<p>GeoScynce | Chief Analyst | Sept 2012 - April 2018</p>
-</section>
-</div> 
-  <hr class="about-sep">
-   <div class="about-links">
-  <a href="https://twitter.com" class="about-link" rel="" target="">
-    <i class="bi bi-twitter"></i>
-     <span class="about-link-text">twitter</span>
-  </a>
-  <a href="https://github.com" class="about-link" rel="" target="">
-    <i class="bi bi-github"></i>
-     <span class="about-link-text">Github</span>
-  </a>
-</div>
-</div>
-
-</section>
-<section id="this-content-appears-below-the-formatted-about-page-content." class="level3">
-<h3 data-anchor-id="this-content-appears-below-the-formatted-about-page-content.">This content appears below the formatted about page content.</h3>
-
+<section id="approximate-optimal-transport-problems" class="level1">
+<h1>Approximate Optimal Transport Problems</h1>
+<p>Optimal transport can be exactly computed, however, computing an exact solution often takes too much time for any practical usages. Because of this, the development of algorithms which compute exact optimal transport has slowed, and in turn we have seen a rise in popularity of approximation algorithms. These approximation algorithms aim to produce a near-optimal transport plan, usually within some predefined error. For some constant <span class="math inline">\(\varepsilon &gt; 0\)</span>, an <span class="math inline">\(\varepsilon\)</span>-approximate transport plan is one where the total cost of the transport plan is within <span class="math inline">\(\varepsilon n\)</span> of the optimum. And often, algorithms which compute exact optimal transport are adapted to more-quickly compute an approximate transport plan. With a much faster execution, these approximation algorithms are more fit for practical usages in the real world.</p>
 
 
 </section>
@@ -156,6 +176,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
   toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
   const isCodeAnnotation = (el) => {
     for (const clz of el.classList) {
       if (clz.startsWith('code-annotation-')) {                     

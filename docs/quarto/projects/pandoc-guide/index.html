@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Mason Gelletly">
+<meta name="author" content="Lucy Paul">
+<meta name="author" content="Shayne Biagi">
+<meta name="author" content="Ashlyn East">
+<meta name="author" content="Theodore Gunn">
+<meta name="dcterms.date" content="2022-03-03">
+
+<title>Shayne Biagi - Pandoc Guide</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="https://startbootstrap.github.io/startbootstrap-grayscale/">
+    <span class="navbar-title">Shayne Biagi</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools ms-auto">
+    <a href="../../index.html" rel="" title="index.html" class="quarto-navigation-tool px-1" aria-label="index.html"><i class="bi bi-house-fill"></i></a>
+    <a href="https://github.com/biagishEDU" rel="" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Pandoc Guide</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">code</div>
+                <div class="quarto-category">documentation</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Authors</div>
+      <div class="quarto-title-meta-contents">
+               <p>Mason Gelletly </p>
+               <p>Lucy Paul </p>
+               <p>Shayne Biagi </p>
+               <p>Ashlyn East </p>
+               <p>Theodore Gunn </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">March 3, 2022</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#student-guide-to-pandoc" id="toc-student-guide-to-pandoc" class="nav-link active" data-scroll-target="#student-guide-to-pandoc">Student Guide to <em>Pandoc</em></a>
+  <ul class="collapse">
+  <li><a href="#installing-pandoc" id="toc-installing-pandoc" class="nav-link" data-scroll-target="#installing-pandoc">Installing <em>Pandoc</em></a>
+  <ul class="collapse">
+  <li><a href="#windows" id="toc-windows" class="nav-link" data-scroll-target="#windows">Windows</a></li>
+  <li><a href="#macos" id="toc-macos" class="nav-link" data-scroll-target="#macos">macOS</a></li>
+  </ul></li>
+  <li><a href="#setting-up-a-writing-and-publishing-environment" id="toc-setting-up-a-writing-and-publishing-environment" class="nav-link" data-scroll-target="#setting-up-a-writing-and-publishing-environment">Setting Up a Writing and Publishing Environment</a>
+  <ul class="collapse">
+  <li><a href="#requirements-2" id="toc-requirements-2" class="nav-link" data-scroll-target="#requirements-2">Requirements</a></li>
+  <li><a href="#steps" id="toc-steps" class="nav-link" data-scroll-target="#steps">Steps</a></li>
+  </ul></li>
+  <li><a href="#what-is-pandoc" id="toc-what-is-pandoc" class="nav-link" data-scroll-target="#what-is-pandoc">What is <em>Pandoc</em>?</a></li>
+  <li><a href="#how-to-write-in-markdown" id="toc-how-to-write-in-markdown" class="nav-link" data-scroll-target="#how-to-write-in-markdown">How to write in Markdown</a>
+  <ul class="collapse">
+  <li><a href="#headings" id="toc-headings" class="nav-link" data-scroll-target="#headings">Headings</a></li>
+  <li><a href="#paragraphs" id="toc-paragraphs" class="nav-link" data-scroll-target="#paragraphs">Paragraphs</a></li>
+  <li><a href="#line-breaks" id="toc-line-breaks" class="nav-link" data-scroll-target="#line-breaks">Line Breaks</a></li>
+  <li><a href="#bold-and-italic-emphasis" id="toc-bold-and-italic-emphasis" class="nav-link" data-scroll-target="#bold-and-italic-emphasis">Bold and Italic Emphasis</a></li>
+  <li><a href="#block-quotes" id="toc-block-quotes" class="nav-link" data-scroll-target="#block-quotes">Block Quotes</a></li>
+  <li><a href="#lists" id="toc-lists" class="nav-link" data-scroll-target="#lists">Lists</a></li>
+  <li><a href="#code-and-escaping-syntax" id="toc-code-and-escaping-syntax" class="nav-link" data-scroll-target="#code-and-escaping-syntax">Code and Escaping Syntax</a></li>
+  <li><a href="#horizontal-rule" id="toc-horizontal-rule" class="nav-link" data-scroll-target="#horizontal-rule">Horizontal Rule</a></li>
+  <li><a href="#links" id="toc-links" class="nav-link" data-scroll-target="#links">Links</a></li>
+  <li><a href="#images" id="toc-images" class="nav-link" data-scroll-target="#images">Images</a></li>
+  <li><a href="#strikethrough" id="toc-strikethrough" class="nav-link" data-scroll-target="#strikethrough">Strikethrough</a></li>
+  <li><a href="#tables" id="toc-tables" class="nav-link" data-scroll-target="#tables">Tables</a></li>
+  <li><a href="#pandoc-extended-syntax" id="toc-pandoc-extended-syntax" class="nav-link" data-scroll-target="#pandoc-extended-syntax">Pandoc Extended Syntax</a></li>
+  <li><a href="#more-resources" id="toc-more-resources" class="nav-link" data-scroll-target="#more-resources">More Resources</a></li>
+  </ul></li>
+  <li><a href="#how-to-publish-to-epub-html-word-and-pdf" id="toc-how-to-publish-to-epub-html-word-and-pdf" class="nav-link" data-scroll-target="#how-to-publish-to-epub-html-word-and-pdf">How to Publish to EPUB, HTML, Word, and PDF</a>
+  <ul class="collapse">
+  <li><a href="#requirements-3" id="toc-requirements-3" class="nav-link" data-scroll-target="#requirements-3">Requirements</a></li>
+  <li><a href="#publishing" id="toc-publishing" class="nav-link" data-scroll-target="#publishing">Publishing</a></li>
+  <li><a href="#congratulations" id="toc-congratulations" class="nav-link" data-scroll-target="#congratulations">Congratulations</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<section id="student-guide-to-pandoc" class="level1">
+<h1>Student Guide to <em>Pandoc</em></h1>
+<p>This is a detailed, topic-based guide to <em>Pandoc</em> aimed at students in Creating User Documentation (ENGL3814) at Virginia Tech.</p>
+<section id="installing-pandoc" class="level2">
+<h2 class="anchored" data-anchor-id="installing-pandoc">Installing <em>Pandoc</em></h2>
+<p>This task includes instructions on how to download and install <em>Pandoc</em> on your computer. There are two sections. One is for <em>Windows</em> users the other is for <em>macOS</em> users. There are also optional steps in each section to install a <em>LaTeX</em> program. Installing a <em>LaTeX</em> program is highly recommended, as <em>Pandoc</em> creates PDFs using <em>LaTeX</em>. The <em>LaTeX</em> program we will be installing is <em>MiKTeX</em>.</p>
+<section id="windows" class="level3">
+<h3 class="anchored" data-anchor-id="windows">Windows</h3>
+<p>This task includes instructions on how to download and install <em>Pandoc</em> for <em>Windows</em> users. There are also optional instructions for installing <em>MiKTeX</em>.</p>
+<section id="requirements" class="level4">
+<h4 class="anchored" data-anchor-id="requirements">Requirements</h4>
+<ul>
+<li>Computer</li>
+<li>Windows Operating System</li>
+<li>Internet Access</li>
+</ul>
+</section>
+<section id="steps-to-install-pandoc" class="level4">
+<h4 class="anchored" data-anchor-id="steps-to-install-pandoc">Steps to Install <em>Pandoc</em></h4>
+<ol type="1">
+<li><p><a href="https://github.com/jgm/pandoc/releases/latest">Go to this webpage.</a></p>
+<blockquote class="blockquote">
+<p>Note: The webpage should look like this.</p>
+</blockquote>
+<img src="images/image1.png" class="img-fluid" width="300" alt="Pandoc Github Page"></li>
+<li><p>Download the <em>pandoc-X.XX.X.X-windows-x86.msi</em> file by clicking on the file name. This is the installer file.</p>
+<blockquote class="blockquote">
+<p>Note: X.XX.X.X refers to the version number. It is 2.17.1.1 in the image above.</p>
+</blockquote></li>
+<li><p>Run the installer by double-clicking on the downloaded file.</p>
+<blockquote class="blockquote">
+<p>Note: A new window should pop up. This is what it should look like.</p>
+</blockquote>
+<img src="images/image2.png" class="img-fluid" width="300" alt="Windows Pandoc Installer"></li>
+<li><p>Press <em>Next</em> to continue.</p></li>
+<li><p>Follow the directions given by the <em>Setup Wizard</em> to complete your installation.</p>
+<blockquote class="blockquote">
+<p>Note: This program automatically installs <em>Pandoc</em> for you.</p>
+</blockquote></li>
+<li><p>Lastly, to check if <em>Pandoc</em> was installed, type “<strong>pandoc -v</strong>” in your terminal. If <em>Pandoc</em> was installed correctly, you should see that the next line in the terminal is: “<strong>pandoc.exe X.XX.X.X</strong>” where the X’s represent the version number. If an error occurs, return to step 1 and try again. &gt; Note: You can access the <em>Windows PowerShell</em> terminal with Windows key + X. Select <em>Windows PowerShell</em> from the menu that pops up. (See image below for reference).</p>
+<img src="images/image7.png" class="img-fluid" width="200" alt="Windows Option Menu"></li>
+</ol>
+</section>
+<section id="optional-steps-to-install-miktex-recommended" class="level4">
+<h4 class="anchored" data-anchor-id="optional-steps-to-install-miktex-recommended">Optional Steps to install MiKTeX (recommended)</h4>
+<ol type="1">
+<li><p><a href="https://miktex.org/download">Go to this webpage.</a></p>
+<blockquote class="blockquote">
+<p>Note: The webpage should look like this.</p>
+</blockquote>
+<img src="images/image3.png" class="img-fluid" width="300" alt="MiKTeX Page"></li>
+<li><p>Under the <em>Windows</em> tab, select the <em>Installer</em> tab.</p></li>
+<li><p>Press the <em>Download</em> button to download the installer.</p></li>
+<li><p>Run the installer by double-clicking on the downloaded file.</p>
+<blockquote class="blockquote">
+<p>Note: A new window should pop up. This is what it should look like.</p>
+</blockquote>
+<img src="images/image4.png" class="img-fluid" width="300" alt="Windows MiKTeX Installer"></li>
+<li><p>Read the conditions and check the “I accept the <em>MiKTeX</em> copying conditions.” option.</p></li>
+<li><p>Press <em>Next</em> to continue.</p></li>
+<li><p>Follow the instructions in the installer to complete the installation.</p></li>
+<li><p>Once you have reached this page in the installer, you are done. <em>MiKTeX</em> has been installed!</p>
+<img src="images/image5.png" class="img-fluid" width="300" alt="Windows MiKTeX Installer Success"></li>
+</ol>
+</section>
+</section>
+<section id="macos" class="level3">
+<h3 class="anchored" data-anchor-id="macos">macOS</h3>
+<p>This task includes instructions on how to download and install <em>Pandoc</em> for <em>macOS</em> users. There are also optional instructions for installing <em>MiKTeX</em>.</p>
+<section id="requirements-1" class="level4">
+<h4 class="anchored" data-anchor-id="requirements-1">Requirements</h4>
+<ul>
+<li>Computer</li>
+<li>macOS Operating System</li>
+<li>Internet Access</li>
+</ul>
+</section>
+<section id="steps-to-install-pandoc-1" class="level4">
+<h4 class="anchored" data-anchor-id="steps-to-install-pandoc-1">Steps to Install <em>Pandoc</em></h4>
+<ol type="1">
+<li><p><a href="https://github.com/jgm/pandoc/releases/latest">Go to this webpage.</a></p>
+<blockquote class="blockquote">
+<p>Note: The webpage should look like this.</p>
+</blockquote>
+<img src="images/image1.png" class="img-fluid" width="300" alt="Pandoc Github Page"></li>
+<li><p>Download the <em>pandoc-X.XX.X.X-macOS.pkg</em> file by clicking on the file name. This is the installer file.</p>
+<blockquote class="blockquote">
+<p>Note: X.XX.X.X refers to the version number. It is 2.17.1.1 in the image above.</p>
+</blockquote></li>
+<li><p>Run the installer by double-clicking on the downloaded file.</p>
+<blockquote class="blockquote">
+<p>Note: A new window should pop up. This is what it should look like.</p>
+</blockquote>
+<img src="images/image6.png" class="img-fluid" width="300" alt="macOS Pandoc Installer"></li>
+<li><p>Press <em>Continue</em> to continue.</p></li>
+<li><p>Follow the directions given by the <em>Installer</em> to complete your installation.</p>
+<blockquote class="blockquote">
+<p>Note: This program automatically installs <em>Pandoc</em> for you.</p>
+</blockquote></li>
+<li><p>Lastly, to check if <em>Pandoc</em> was installed, type “<strong>pandoc -v</strong>” in your terminal. If <em>Pandoc</em> was installed correctly, you should see that the next line in the terminal is: “<strong>pandoc.exe X.XX.X.X</strong>” where the X’s represent the version number. If an error occurs, return to step 1 and try again.</p>
+<blockquote class="blockquote">
+<p>Note: You can access the terminal on a Mac by opening the Launchpad, typing Terminal in the search field, and clicking Terminal.</p>
+</blockquote></li>
+</ol>
+</section>
+<section id="optional-steps-to-install-miktex-recommended-1" class="level4">
+<h4 class="anchored" data-anchor-id="optional-steps-to-install-miktex-recommended-1">Optional Steps to install MiKTeX (recommended)</h4>
+<ol type="1">
+<li><p><a href="https://miktex.org/download">Go to this webpage.</a></p>
+<blockquote class="blockquote">
+<p>Note: The webpage should look like this.</p>
+</blockquote>
+<img src="images/image8.png" class="img-fluid" width="300" alt="MikTeX Page"></li>
+<li><p>Select the <em>Mac</em> tab.</p></li>
+<li><p>Press the <em>Download</em> button to download the disk image (.dmg) file.</p></li>
+<li><p>Double-click on the downloaded disk image (.dmg) file.</p>
+<blockquote class="blockquote">
+<p>Note: A new window should pop up. This is what it should look like.</p>
+</blockquote>
+<img src="images/image9.png" class="img-fluid" width="300" alt="macOS MikTeX Installer"></li>
+<li><p>Drag the <em>MiKTeX</em> icon onto the <em>Applications</em> folder icon.</p>
+<blockquote class="blockquote">
+<p>Note: This will install the <em>MiKTeX Console</em> application and all required files.</p>
+</blockquote></li>
+<li><p>Run the <em>MiKTeX Console</em> application from <em>Launchpad</em>.</p>
+<blockquote class="blockquote">
+<p>Note: A new window should pop up. This is what it should look like.</p>
+</blockquote>
+<img src="images/image10.png" class="img-fluid" width="300" alt="macOS MikTeX Console"></li>
+<li><p>Select the <em>Finish private setup</em> option.</p></li>
+<li><p><em>MiKTeX</em> has been installed!</p></li>
+</ol>
+</section>
+</section>
+</section>
+<section id="setting-up-a-writing-and-publishing-environment" class="level2">
+<h2 class="anchored" data-anchor-id="setting-up-a-writing-and-publishing-environment">Setting Up a Writing and Publishing Environment</h2>
+<p>To easily convert files we’ll be using a writing and publishing environment. Visual Studio Code is a popular coding editor and we’ll be using it with <em>Pandoc</em> to convert files. These steps will walk you through downloading, installing, and setting up Visual Studio Code.</p>
+<section id="requirements-2" class="level3">
+<h3 class="anchored" data-anchor-id="requirements-2">Requirements</h3>
+<ul>
+<li>Computer running either Windows or Mac</li>
+</ul>
+</section>
+<section id="steps" class="level3">
+<h3 class="anchored" data-anchor-id="steps">Steps</h3>
+<ol type="1">
+<li><p><strong>Go</strong> to the Visual Studio Code <a href="https://code.visualstudio.com/download">website</a>.</p></li>
+<li><p><strong>Download</strong> Visual Studio code for your machine.</p>
+<img src="images/download.JPG" class="img-fluid" width="300" alt="VSCode Webpage"></li>
+<li><p><strong>Install</strong> the package.</p></li>
+<li><p><strong>Open</strong> the program.</p></li>
+<li><p><strong>Navigate</strong> to the extensions tab on the left of the screen.</p>
+<img src="images/extensions.png" class="img-fluid" width="300" alt="Extensions tab"></li>
+<li><p><strong>Install</strong> any useful extensions you might need.</p>
+<p><strong>Note</strong> helpful extensions for markdown are <code>markdownlint</code> and <code>Markdown All in One</code>.</p></li>
+<li><p><strong>Customize</strong> with themes (Optional).</p></li>
+<li><p><strong>Open</strong> the folder your files will be in or create a new folder.</p></li>
+<li><p><strong>Add</strong> a new markdown file.</p></li>
+<li><p><strong>Add</strong> content.</p></li>
+</ol>
+</section>
+</section>
+<section id="what-is-pandoc" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-pandoc">What is <em>Pandoc</em>?</h2>
+<p>When writing documents for different occasions, it is often necessary to know how to convert a document from one form to another. While some professors may require PDF files, others may require Markdown files. So, with the help of <em>Pandoc</em> converting documents becomes a simple task.</p>
+<p><em>Pandoc</em> is a tool that can be installed on your computer to convert files from one format to another. <em>Pandoc</em> works with formats such as HTML, ebooks, documentation formats, bibliography formats and many more.</p>
+<p>One <strong>example</strong> of how students have used <em>Pandoc</em> in the past was for a project. This project required converting a Microsoft Word file (.docx) to a Markdown file (.md). After downloading and checking for installation, by typing the correct conversion code into the computer terminal, <em>Pandoc</em> converted the students’ files from Microsoft Word to Markdown.</p>
+<p>Some <strong>benefits</strong> of <em>Pandoc</em> include:</p>
+<ul>
+<li>It can convert formats from and to a a variety of different formats</li>
+<li>Its ability to convert citations into a properly formatted citation</li>
+<li>The option to customize using a template system and writing filters</li>
+<li>Works with slide show formats as well as text and data formats</li>
+</ul>
+</section>
+<section id="how-to-write-in-markdown" class="level2">
+<h2 class="anchored" data-anchor-id="how-to-write-in-markdown">How to write in Markdown</h2>
+<p>This is a general tutorial for writing in Markdown syntax. It will detail the use of basic Markdown syntax elements. Additionally, since Pandoc understands an extended version of Markdown syntax, some useful extensions of traditional Markdown syntax will be sectioned at the end for use with Pandoc.</p>
+<section id="headings" class="level3">
+<h3 class="anchored" data-anchor-id="headings">Headings</h3>
+<p>Headings are created by beginning a line with hashtags (#). The heading name must be separated from the hashtags by a blank space. The number of hashtags represents the level of the heading. For instance, a level one heading would be written as “# Level 1 Heading”.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Heading Level</th>
+<th>Markdown Syntax</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Level 1</td>
+<td># Level 1 Heading</td>
+</tr>
+<tr class="even">
+<td>Level 2</td>
+<td>## Level 2 Heading</td>
+</tr>
+<tr class="odd">
+<td>Level 3</td>
+<td>### Level 3 Heading</td>
+</tr>
+<tr class="even">
+<td>Level 4</td>
+<td>#### Level 4 Heading</td>
+</tr>
+<tr class="odd">
+<td>Level 5</td>
+<td>##### Level 5 Heading</td>
+</tr>
+<tr class="even">
+<td>Level 6</td>
+<td>###### Level 6 Heading</td>
+</tr>
+</tbody>
+</table>
+<blockquote class="blockquote">
+<p>The table above illustrates syntax for various level headings. Note that markdown only supports <strong>six levels</strong> of headings.</p>
+</blockquote>
+<hr>
+</section>
+<section id="paragraphs" class="level3">
+<h3 class="anchored" data-anchor-id="paragraphs">Paragraphs</h3>
+<p>Paragraphs can be created by using a blank line to separate blocks of text.</p>
+<p>For instance, these two paragraphs have been separated by a blank space and thus will be rendered as such.</p>
+<blockquote class="blockquote">
+<p><strong>Note:</strong> If you must indent a paragraph use “<code>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;</code>”. This bit of text will add 4 empty spaces.</p>
+</blockquote>
+<p>&nbsp;&nbsp;&nbsp;&nbsp; This sentence has been indented using this technique.</p>
+<hr>
+</section>
+<section id="line-breaks" class="level3">
+<h3 class="anchored" data-anchor-id="line-breaks">Line Breaks</h3>
+<p>Line breaks can be used by adding two or more blank spaces at the end of a line and then pressing return.<br>
+This line has been separated with a line break.</p>
+<hr>
+</section>
+<section id="bold-and-italic-emphasis" class="level3">
+<h3 class="anchored" data-anchor-id="bold-and-italic-emphasis">Bold and Italic Emphasis</h3>
+<p>To bold text, surround it with two asterisks. To italicize text, surround it with one asterisk. To both bold and italicize a piece of text, surround it with three asterisks.</p>
+<table class="table">
+<colgroup>
+<col style="width: 51%">
+<col style="width: 48%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Markdown Syntax</th>
+<th>Output</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>*This* is italicized.</code></td>
+<td><em>This</em> is italicized.</td>
+</tr>
+<tr class="even">
+<td><code>**This** is in bold.</code></td>
+<td><strong>This</strong> is in bold.</td>
+</tr>
+<tr class="odd">
+<td><code>***This*** is in bold and italicized.</code></td>
+<td><strong><em>This</em></strong> is in bold and italicized.</td>
+</tr>
+</tbody>
+</table>
+<blockquote class="blockquote">
+<p>The table above illustrates various ways to emphasize text.</p>
+</blockquote>
+<hr>
+</section>
+<section id="block-quotes" class="level3">
+<h3 class="anchored" data-anchor-id="block-quotes">Block Quotes</h3>
+<p>To create block quotes, begin paragraph with &gt;.</p>
+<p>For example, in markdown<br>
+<code>&gt; This is a block quote.</code></p>
+<p>For a block quotes with blank line, begin the blank line with &gt;. Also, block quotes can be nested by adding &gt;&gt; in front of the nested quote. See the example below.</p>
+<p><code>&gt; This is a block quote</code><br>
+<code>&gt;</code><br>
+<code>&gt; with a blank line</code><br>
+<code>&gt;&gt; and a nested quote.</code></p>
+<hr>
+</section>
+<section id="lists" class="level3">
+<h3 class="anchored" data-anchor-id="lists">Lists</h3>
+<p>Both unordered lists and ordered lists can be created in Markdown. Lists can also be indented to create nested lists.</p>
+<section id="ordered-lists" class="level4">
+<h4 class="anchored" data-anchor-id="ordered-lists">Ordered Lists</h4>
+<p>In Markdown, to create an ordered list, you must begin each list element with a number and a period. The numbering must begin with number one, but the order following number one does not matter.</p>
+<p>An ordered list in Markdown syntax is as follows:</p>
+<p><code>1. One</code><br>
+<code>2. Two</code><br>
+<code>3. Three</code></p>
+<p>OR</p>
+<p><code>1. One</code><br>
+<code>1. Two</code><br>
+<code>1. Three</code></p>
+<p>OR</p>
+<p><code>1. One</code><br>
+<code>75. Two</code><br>
+<code>35. Three</code></p>
+<p>When rendered, the lists all look like this:</p>
+<ol type="1">
+<li>One</li>
+<li>Two</li>
+<li>Three</li>
+</ol>
+</section>
+<section id="unordered-lists" class="level4">
+<h4 class="anchored" data-anchor-id="unordered-lists">Unordered Lists</h4>
+<p>Unordered lists can be created by adding dashes (-), asterisks (*), or plus signs (+) before each list element.</p>
+<p>An unordered list in Markdown syntax is as follows:</p>
+<p><code>- One</code><br>
+<code>- Two</code><br>
+<code>- Three</code></p>
+<p>OR</p>
+<p><code>* One</code><br>
+<code>* Two</code><br>
+<code>* Three</code></p>
+<p>OR</p>
+<p><code>+ One</code><br>
+<code>+ Two</code><br>
+<code>+ Three</code></p>
+<p>When rendered, the lists all look like this:</p>
+<ul>
+<li>One</li>
+<li>Two</li>
+<li>Three</li>
+</ul>
+<p>Here is an example of a nested list.</p>
+<p>Markdown Syntax:</p>
+<p><code>1. One</code><br>
+<code>2. Two</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<code>- Indented One</code><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<code>- Indented Two</code><br>
+<code>3. Three</code></p>
+<p>Output:</p>
+<ol type="1">
+<li>One</li>
+<li>Two
+<ul>
+<li>Indented One</li>
+<li>Indented Two</li>
+</ul></li>
+<li>Three</li>
+</ol>
+<hr>
+</section>
+</section>
+<section id="code-and-escaping-syntax" class="level3">
+<h3 class="anchored" data-anchor-id="code-and-escaping-syntax">Code and Escaping Syntax</h3>
+<p>To escape any Markdown rendering for bits of code, surround your text with backticks (`).</p>
+<p>For example: <code>*This*</code> will not be in italics since I surrounded it with backticks.</p>
+<p>You can also use backslash (<code>\</code>) to escape other characters as:</p>
+<ul>
+<li><p>backslash \</p></li>
+<li><p>backtick `</p></li>
+<li><p>asterisk *</p></li>
+<li><p>underscore _</p></li>
+<li><p>curly braces { }</p></li>
+<li><p>brackets [ ]</p></li>
+<li><p>angle brackets &lt; &gt;</p></li>
+<li><p>parentheses ( )</p></li>
+<li><p>hashtag #</p></li>
+<li><p>plus sign +</p></li>
+<li><p>dash -</p></li>
+<li><p>period .</p></li>
+<li><p>exclamation mark !</p></li>
+<li><p>pipe |</p></li>
+</ul>
+<p>Markdown Syntax: <code>\# Without a backslash, this would be a heading.</code></p>
+<p>Output: # Without a backslash, this would be a heading.</p>
+<hr>
+</section>
+<section id="horizontal-rule" class="level3">
+<h3 class="anchored" data-anchor-id="horizontal-rule">Horizontal Rule</h3>
+<p>In order to insert a horizontal rule in Markdown, you must use three or more asterisks, dashes, or underscores on a line, like so:</p>
+<p><code>***</code><br>
+<code>---</code><br>
+<code>___</code></p>
+<blockquote class="blockquote">
+<p>A horizontal rule is below this.</p>
+</blockquote>
+<hr>
+</section>
+<section id="links" class="level3">
+<h3 class="anchored" data-anchor-id="links">Links</h3>
+<p>For links, you can enclose link text in brackets and follow it with the URL in parentheses.</p>
+<p>For instance: <code>[Google](google.com)</code><br>
+will look like: <a href="google.com">Google</a></p>
+<blockquote class="blockquote">
+<p>You can also link to other files by replacing the link address with a file name. Make sure the file is accessible in your current working directory.</p>
+</blockquote>
+<hr>
+</section>
+<section id="images" class="level3">
+<h3 class="anchored" data-anchor-id="images">Images</h3>
+<p>For images, you can add an exclamation mark (!), followed by image alt text enclosed by brackets, and then followed by the image file path or URL enclosed by parentheses. You can also add a title to the image with quotations marks besides your path or URL. See below for an example.</p>
+<p>Markdown Syntax:</p>
+<p><code>![Markdown Logo](/media/markdown.jpg "Markdown")</code></p>
+<p>Output: <img src="images/markdown.png" title="Markdown" class="img-fluid" width="100" alt="Markdown Logo"></p>
+<p>Finally, you can link images to a URL by adding the link address enclosed by parentheses immediately following the image. You must also surround the image code with brackets. See the following example.</p>
+<p>Markdown Syntax:</p>
+<p><code>[![Markdown Logo](/media/markdown.jpg "Markdown")](https://www.markdownguide.org/getting-started/)</code></p>
+<p>Output: <a href="https://www.markdownguide.org/getting-started/"><img src="images/markdown.png" title="Markdown" class="img-fluid" width="100" alt="Markdown Logo"></a></p>
+<hr>
+</section>
+<section id="strikethrough" class="level3">
+<h3 class="anchored" data-anchor-id="strikethrough">Strikethrough</h3>
+<p>You can strikethrough text by surrounding the text with two tildes.</p>
+<p>For example: <code>~~This~~ is using strikethrough.</code></p>
+<p>Output: <del>This</del> is using strikethrough.</p>
+<hr>
+</section>
+<section id="tables" class="level3">
+<h3 class="anchored" data-anchor-id="tables">Tables</h3>
+<p>To create a table, use three or more hyphens to create the column headers, and use pipes to create each column. See below for an example.</p>
+<p>Markdown Syntax:<br>
+<code>| Header 1 | Header 2 |</code><br>
+<code>| -------- | -------- |</code><br>
+<code>| Element1 | Element2 |</code><br>
+<code>| Element3 | Element4 |</code></p>
+<p>Output:</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Header 1</th>
+<th>Header 2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Element1</td>
+<td>Element2</td>
+</tr>
+<tr class="even">
+<td>Element3</td>
+<td>Element4</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="pandoc-extended-syntax" class="level3">
+<h3 class="anchored" data-anchor-id="pandoc-extended-syntax">Pandoc Extended Syntax</h3>
+<p>Pandoc understands an extended version of Markdown, so here are some useful extensions of the syntax which will work with Pandoc.</p>
+<section id="setext-style-headings" class="level4">
+<h4 class="anchored" data-anchor-id="setext-style-headings">Setext-style Headings</h4>
+<p>You can create headings in setext-style by following a heading with a line of equal signs (for level 1 headings) or dashes (for level 2 headings).</p>
+<p>For example:</p>
+<p><code>This is a level 1 heading</code><br>
+<code>=========================</code></p>
+<p><code>This is a level 2 heading</code><br>
+<code>-------------------------</code></p>
+</section>
+<section id="definition-lists" class="level4">
+<h4 class="anchored" data-anchor-id="definition-lists">Definition Lists</h4>
+<p>Pandoc allows for definition lists with the following syntax.</p>
+<pre><code>Term 1
+
+:   Definition 1
+
+Term 2
+
+:   Definition 2
+
+    Second paragraph of definition 2.</code></pre>
+</section>
+<section id="multiline-tables" class="level4">
+<h4 class="anchored" data-anchor-id="multiline-tables">Multiline Tables</h4>
+<p>Pandoc also supports multiline tables. Table rows may span multiple lines of text. See below for an example on how you may format one.</p>
+<pre><code>-------------------------------------------------------------
+ Centered   Default           Right Left
+  Header    Aligned         Aligned Aligned
+----------- ------- --------------- -------------------------
+First       row                12.0 Example of a row that
+                                    spans multiple lines.
+
+Second      row                5.0 Here's another one. Note
+                                    the blank line between
+                                    rows.
+-------------------------------------------------------------
+
+Table: Here's the caption. It, too, may span
+multiple lines.</code></pre>
+</section>
+<section id="grid-tables" class="level4">
+<h4 class="anchored" data-anchor-id="grid-tables">Grid Tables</h4>
+<p>Grid Tables can also be created with Pandoc. A row of equal signs must separate the headers, and plus signs must indicate corners of cells. See below for an example.</p>
+<pre><code>: Sample grid table.
+
++---------------+---------------+--------------------+
+| Fruit         | Price         | Advantages         |
++===============+===============+====================+
+| Bananas       | $1.34         | - built-in wrapper |
+|               |               | - bright color     |
++---------------+---------------+--------------------+
+| Oranges       | $2.10         | - cures scurvy     |
+|               |               | - tasty            |
++---------------+---------------+--------------------+</code></pre>
+<p>Cell elements may contain multiple paragraphs, code blocks, lists, etc. However, cannot span multiple columns or rows.</p>
+</section>
+<section id="superscripts-and-subscripts" class="level4">
+<h4 class="anchored" data-anchor-id="superscripts-and-subscripts">Superscripts and Subscripts</h4>
+<p>Superscripts can be created by surrounding the superscript with carets (^). Subscripts can be creating by surounding the subscript with tildes (~).</p>
+<p>For example: <code>H~2~O is a liquid. 2^10^ is 1024.</code></p>
+</section>
+<section id="tex-math" class="level4">
+<h4 class="anchored" data-anchor-id="tex-math">TeX Math</h4>
+<p>Any text surrounded by two dollar signs ($) will be treated as TeX math. The output will depend on the output format. There must not be a whitespace after the first dollar sign or before the second one.</p>
+<p>Example: <code>$2+2=4$</code></p>
+<p>For example, in Docx format, the text will be rendered using OMML math markup.</p>
+<hr>
+</section>
+</section>
+<section id="more-resources" class="level3">
+<h3 class="anchored" data-anchor-id="more-resources">More Resources</h3>
+<p>For more information about Markdown syntax, a good resource is the official <a href="https://www.markdownguide.org/">Markdown Guide</a>.</p>
+<p>For more information about Pandoc’s extended syntax, a good resource is the official <a href="https://pandoc.org/MANUAL.html">Pandoc Manual</a>.</p>
+</section>
+</section>
+<section id="how-to-publish-to-epub-html-word-and-pdf" class="level2">
+<h2 class="anchored" data-anchor-id="how-to-publish-to-epub-html-word-and-pdf">How to Publish to EPUB, HTML, Word, and PDF</h2>
+<p>This section is a comprehensive guide on how to convert Markdown files to EPUB, HTML, Word, and PDF files. At the end of this process you will have the knowledge necessary to effortlessly make this conversion in the future.</p>
+<section id="requirements-3" class="level3">
+<h3 class="anchored" data-anchor-id="requirements-3">Requirements</h3>
+<p>The following are assumed to have been installed/obtained before beginning the guide</p>
+<ul>
+<li><em>Pandoc</em></li>
+<li>Markdown File</li>
+<li><em>pdfLatex</em> <strong>FOR PDF PUBLISHES ONLY</strong></li>
+</ul>
+</section>
+<section id="publishing" class="level3">
+<h3 class="anchored" data-anchor-id="publishing">Publishing</h3>
+<ol type="1">
+<li><p>Open your <code>File Explorer</code> and locate the Markdown file that you would like to convert. Your screen should look similar to the image below (where the <em>“convertMe”</em> file is YOUR file).</p>
+<img src="images/fileExplorer.png" class="img-fluid" width="300" alt="File Explorer"></li>
+<li><p>Click on the <code>Path</code> of your current directory in your file explorer. This can be located directly above the files shown, and is shown highlighted in the image below.</p>
+<img src="images/highlightPath.png" class="img-fluid" width="300" alt="Highlighted Path"></li>
+<li><p>Type <code>cmd</code> over your highlighted path. Once it is highlighted from the previous step, all you must do is begin typing. Once this is complete, your screen should look similar to the image below.</p>
+<img src="images/cmdPath.png" class="img-fluid" width="300" alt="cmd Path"></li>
+<li><p>Press <code>enter</code>. This will open the command prompt at the directory that you were in during the File Explorer session. Once this is complete, your screen should look similar to the image below.</p>
+<img src="images/cmdOpen.png" class="img-fluid" width="300" alt="cmd Opened"></li>
+<li><p>Type the appropriate command into the command prompt. The generalized formula for your command is the following</p>
+<p><code>pandoc -s YOURFILE.md -o YOUROUTPUT.FILETYPE</code></p>
+<p>The YOURFILE.md should be renamed based upon the name of the Markdown file you are attempting to convert. In our examples below, this file is named <em>“convertMe”</em>.</p>
+<p>The YOUROUTPUT.FILETYPE should be renamed based upon the desired name of your output file and the type of file you are converting to. In our examples below, the file is named <em>“convertedFile”</em> and is being converted to Word.</p>
+<p><strong>For EPUB</strong></p>
+<p><code>pandoc -s convertMe.md -o convertedFile.epub</code></p>
+<p><strong>For HTML</strong></p>
+<p><code>pandoc -s convertMe.md -o convertedFile.html</code></p>
+<p><strong>For Word</strong></p>
+<p><code>pandoc -s convertMe.md -o convertedFile.docx</code></p>
+<p><strong>For PDF</strong> <em>must have pdfLatex installed</em></p>
+<p><code>pandoc -s convertMe.md -o convertedFile.pdf</code></p>
+<p>Once this is complete, your screen’s command should look similar to the image below.</p>
+<img src="images/cmdCommands.png" class="img-fluid" width="300" alt="cmd Commands"></li>
+<li><p>Press <code>enter</code>. This will make <em>Pandoc</em> execute the command. The output file will now be present in the folder of your original Markdown file.</p>
+<blockquote class="blockquote">
+<p>If you are receiving an error upon hitting <code>enter</code> you have made some small mistake in the previous steps. Carefully retrace your steps and be certain you are typing everything exactly as expected into the command prompt.</p>
+</blockquote>
+<p>Once this is complete, your screen should look similar to the image below.</p>
+<img src="images/filesCreated.png" class="img-fluid" width="300" alt="File Created"></li>
+</ol>
+</section>
+<section id="congratulations" class="level3">
+<h3 class="anchored" data-anchor-id="congratulations">Congratulations</h3>
+<p>You have successfully converted your file.</p>
+
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

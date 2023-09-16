@@ -2,8 +2,15 @@
   {
     "listing": "/index.html",
     "items": [
-      "/posts/post-with-code/index.html",
-      "/posts/welcome/index.html"
+      "/projects/post-with-code/index.html",
+      "/projects/welcome/index.html",
+      "/projects/governmentSurveillance/index.html",
+      "/projects/wGAN-stock-predictions/index.html",
+      "/projects/OT-pushRelabel/index.html",
+      "/projects/OT-graphTheoretical/index.html",
+      "/projects/OT-applications/index.html",
+      "/projects/OT-survey/index.html",
+      "/projects/pandoc-guide/index.html"
     ]
   }
 ]

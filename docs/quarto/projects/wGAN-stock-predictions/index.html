@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Shayne Biagi">
+<meta name="author" content="Andrew Istfan">
+<meta name="author" content="Franco Medrano">
+<meta name="dcterms.date" content="2023-05-04">
+
+<title>Shayne Biagi - Deep Learning Equity Trading Model</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="https://startbootstrap.github.io/startbootstrap-grayscale/">
+    <span class="navbar-title">Shayne Biagi</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools ms-auto">
+    <a href="../../index.html" rel="" title="index.html" class="quarto-navigation-tool px-1" aria-label="index.html"><i class="bi bi-house-fill"></i></a>
+    <a href="https://github.com/biagishEDU" rel="" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Deep Learning Equity Trading Model</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">machine learning</div>
+                <div class="quarto-category">data analytics</div>
+                <div class="quarto-category">neural networks</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Authors</div>
+      <div class="quarto-title-meta-contents">
+               <p>Shayne Biagi </p>
+               <p>Andrew Istfan </p>
+               <p>Franco Medrano </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">May 4, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#abstract" id="toc-abstract" class="nav-link active" data-scroll-target="#abstract">Abstract</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction">Introduction</a>
+  <ul class="collapse">
+  <li><a href="#problem-description" id="toc-problem-description" class="nav-link" data-scroll-target="#problem-description">Problem Description</a></li>
+  <li><a href="#motivation" id="toc-motivation" class="nav-link" data-scroll-target="#motivation">Motivation</a></li>
+  <li><a href="#challenges-and-solutions" id="toc-challenges-and-solutions" class="nav-link" data-scroll-target="#challenges-and-solutions">Challenges and Solutions</a></li>
+  </ul></li>
+  <li><a href="#related-work" id="toc-related-work" class="nav-link" data-scroll-target="#related-work">Related Work</a>
+  <ul class="collapse">
+  <li><a href="#literature-survey" id="toc-literature-survey" class="nav-link" data-scroll-target="#literature-survey">Literature Survey</a></li>
+  <li><a href="#limitations-of-existing-approaches" id="toc-limitations-of-existing-approaches" class="nav-link" data-scroll-target="#limitations-of-existing-approaches">Limitations of Existing Approaches</a></li>
+  </ul></li>
+  <li><a href="#proposed-approach" id="toc-proposed-approach" class="nav-link" data-scroll-target="#proposed-approach">Proposed Approach</a>
+  <ul class="collapse">
+  <li><a href="#problem-definition" id="toc-problem-definition" class="nav-link" data-scroll-target="#problem-definition">Problem Definition</a>
+  <ul class="collapse">
+  <li><a href="#project-pipeline-diagram" id="toc-project-pipeline-diagram" class="nav-link" data-scroll-target="#project-pipeline-diagram">Project Pipeline Diagram</a></li>
+  </ul></li>
+  <li><a href="#the-dataset" id="toc-the-dataset" class="nav-link" data-scroll-target="#the-dataset">The Dataset</a></li>
+  <li><a href="#fundamental-analysis" id="toc-fundamental-analysis" class="nav-link" data-scroll-target="#fundamental-analysis">Fundamental Analysis</a></li>
+  <li><a href="#technical-analysis" id="toc-technical-analysis" class="nav-link" data-scroll-target="#technical-analysis">Technical Analysis</a></li>
+  <li><a href="#model-architecture-descriptions" id="toc-model-architecture-descriptions" class="nav-link" data-scroll-target="#model-architecture-descriptions">Model Architecture Descriptions</a>
+  <ul class="collapse">
+  <li><a href="#social-media-webscraper" id="toc-social-media-webscraper" class="nav-link" data-scroll-target="#social-media-webscraper">Social Media Webscraper</a></li>
+  <li><a href="#vader-for-sentiment-analysis" id="toc-vader-for-sentiment-analysis" class="nav-link" data-scroll-target="#vader-for-sentiment-analysis">VADER for Sentiment Analysis</a></li>
+  <li><a href="#wgan-gp-for-stock-price-prediction" id="toc-wgan-gp-for-stock-price-prediction" class="nav-link" data-scroll-target="#wgan-gp-for-stock-price-prediction">wGAN-GP for Stock Price Prediction</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#experimental-evaluation" id="toc-experimental-evaluation" class="nav-link" data-scroll-target="#experimental-evaluation">Experimental Evaluation</a>
+  <ul class="collapse">
+  <li><a href="#dataset-exploration" id="toc-dataset-exploration" class="nav-link" data-scroll-target="#dataset-exploration">Dataset Exploration</a>
+  <ul class="collapse">
+  <li><a href="#technical-analysis-1" id="toc-technical-analysis-1" class="nav-link" data-scroll-target="#technical-analysis-1">Technical Analysis</a></li>
+  <li><a href="#fundamental-analysis-1" id="toc-fundamental-analysis-1" class="nav-link" data-scroll-target="#fundamental-analysis-1">Fundamental Analysis</a></li>
+  </ul></li>
+  <li><a href="#prediction-results" id="toc-prediction-results" class="nav-link" data-scroll-target="#prediction-results">Prediction Results</a>
+  <ul class="collapse">
+  <li><a href="#rolling-windows-and-sentiment-analysis" id="toc-rolling-windows-and-sentiment-analysis" class="nav-link" data-scroll-target="#rolling-windows-and-sentiment-analysis">Rolling-windows and Sentiment Analysis</a></li>
+  <li><a href="#best-predictions" id="toc-best-predictions" class="nav-link" data-scroll-target="#best-predictions">Best Predictions</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#future-work" id="toc-future-work" class="nav-link" data-scroll-target="#future-work">Future Work</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p><img src="3day_valandtestpreds.png" class="img-fluid"></p>
+<p>This project seeks to rely on recent deep learning and technical analysis advancements to generate predictions of short term price movements for the Apple stock, $AAPL.</p>
+<p>Please check out the links below for the full paper and the project website.<br>
+<a href="https://github.com/biagishEDU/Deep-Learning-Equity-Trading-Model/blob/main/Final%20Paper.pdf">Full Paper</a><br>
+<a href="https://fmedrano2019.github.io/TraderJoes/">Project Website</a></p>
+<section id="abstract" class="level1">
+<h1>Abstract</h1>
+<p>With this paper, we detail our proposal in using state-of-the-art machine learning advancements to forecast stock price movements for $APPL. Machine learning has taken foothold at the forefront of business forecasting research, with many types of models, from LSTMs to GANs, being used for prediction purposes. Over the last few years, these models have seen many incremental improvements, and so should result in more robust and accurate prediction methods. Here we focus on improvements on the traditional GAN model, namely the wGAN-GP, to make closing price predictions on the stock market.</p>
+</section>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<section id="problem-description" class="level2">
+<h2 class="anchored" data-anchor-id="problem-description">Problem Description</h2>
+<p>With the New York Stock Exchange containing a total global market capitalization of $15 trillion, it is no surprise that both retail and institutional investors have relied on every possible advancement in the digital world to generate stronger returns <a href="#references">[3]</a>. As such, to remain a competitive investor in such a highly technologically optimized market, it is crucial that new innovative approaches to investing are made. Ultimately, this has led to an open market today where 90% of all short term trades and 50-70% of all trades are completed by stocking trading algorithms <a href="#references">[3]</a>. Primarily, these computer generated trades rely on technical analysis, which avoid traditional fundamental methodologies, and instead rely on past trading activity, price changes of a security, and patterns in charts to develop valuable indicators for a given security’s future price movements.</p>
+<p>Our solution proposal seeks to rely on recent deep learning and technical analysis advancements to generate predictions of short term price movements for a specific equity holding. Our model will rely on an ensemble approach by combining analysisfrom a Wasserstein Generative Adversarial Network (wGAN) and the pretrained Valence Aware Dictionary for Sentiment Reasoning (VADER) model to generate our prediction process. The wGAN serves as a stable learning model during gradient descent, while avoiding convergence failures and mode collapse. This model will serve as a generator that will utilize two key data points for prediction, correlated assets and technical analysis. This model will serve in conjunction with VADER, which will offer sentiment analysis of discussion of the chosen security, determining whether posts are positive, neutral, or negative. Ultimately, we seek to rely on each of these models to offer an alternative to human based decisionmaking for short-term trading and instead create automated and successful predictions to stock price movements.</p>
+</section>
+<section id="motivation" class="level2">
+<h2 class="anchored" data-anchor-id="motivation">Motivation</h2>
+<p>Accurate forecasting of the stock market can be greatly beneficial for a variety of persons. Politicians and government officials would be able to leverage this forecasting to predict the future health of the economy. And with such predictions, they would be able to enact policy to counteract problematic trends, leading to more stable economic growth on a national level. Investors would be able to better profit from trades, generating wealth and more stable income from the stock market. Businesses and corporations could even use this forecasting information for more accurate quarterly performance reviews to assess projected success.</p>
+<p>These are just a few of the possible benefits to motivate a project around improving current state-of-the-art stock market prediction models. This just touches the surface of what is possible here. With this data, anyone could be able to achieve a greater understanding of the behavior of the stock market, which up until this point has been one of the largest mysteries in finance.</p>
+</section>
+<section id="challenges-and-solutions" class="level2">
+<h2 class="anchored" data-anchor-id="challenges-and-solutions">Challenges and Solutions</h2>
+<p>The primary question is: how can the currently available methods of forecasting the stock market be improved?</p>
+<p>Enter artificial intelligence, and more specifically, machine learning (ML) models. With innate abilities to identify patterns, trends, and mostly unnoticeable correlations between data points, ML models are the perfect candidate for such tasks. Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM) <a href="#references">[6]</a>, Gated Recurrent Unit (GRU) and models have all been used to accurately predict time series data before, so why not extend the ideas to predicting stock market prices? Unfortunately, the stock market is extremely volatile, and as a result, it is quite difficult to forecast. Because of this, searches for more complicated models which accurately assess the vast and obscure trends and patterns of the stock market have heightened in recent years, leading to improvements in GAN models and similar for this use case specifically <a href="#references">[5]</a>.</p>
+<p>Although we have seen improvements in many of these more complicated stock price prediction models, there always remains a lack of assessment of sentiment directly from the public. In the most basic sense, people are the primary cause of stock market movements. With a public mass movement towards selling a specific stock, there is likely a fall in a stock price to follow. Similarly, if more people are willing to purchase a stock than sell it, then an increase in the price is likely to follow. Supply and demand are primary factors in stock price movement. Researchers attempt solving this challenge by scraping news articles from official sources, but oftentimes, sentiment received from official sources differs substantially from the actual sentiment of the public.</p>
+<p>To rectify these issues, this project proposes the use of a wGANGP (Gradient Penalty) model fed by analyses of public sentiment gained from social media platforms along with basic and technical indicators associated with a specific stock ($APPL in our case). With data from posts and comments from social media, sentiment can be assessed directly from personal accounts rather than official news outlets, hopefully bypassing media biases which could skew the predicted stock prices. As people more directly influence the stock market, there is definitely a perceived benefit in this approach. Regarding the use of a wGAN-GP model specifically, it has been chosen for its improvements upon a traditional GAN, noting its advantages in training stability and higher likelihood of convergence. This is directly beneficial when using more complex models for the generator and discriminator in the GAN.</p>
+</section>
+</section>
+<section id="related-work" class="level1">
+<h1>Related Work</h1>
+<section id="literature-survey" class="level2">
+<h2 class="anchored" data-anchor-id="literature-survey">Literature Survey</h2>
+<p>The article by Boris Banushev, <em>Using the Latest Advancements in Deep Learning to Predict Stock Price Movements</em> <a href="#references">[1]</a>, provided us great insight into how a GAN can be applied to make time series predictions on a stock. In his project, Boris uses an Long-Short Term Memory Recurrent Neural Network for his generator and a Convolutional Neural Network as his discriminator. To supplement his data, he uses various techniques like Fourier transforms, stacked autoencoders, and eigen portfolios to assemble the most information possible on the stock. Although we will not be using most of these techniques, he does conduct sentiment analysis by gathering news articles and inputting their text into a pretrained BERT model. To tune the hyperparameters of the GAN model, Boris uses reinforcement learning and Bayesian optimization.</p>
+<p>In <em>Generative Adversarial Network for Stock Market Price Prediction</em> by Ricardo Romero <a href="#references">[4]</a>, the project’s main goal was to see if various deep learning models could predict whether a stock would increase or decrease. A GAN model, an ARIMA model, an LSTM model, and a Deep LSTM model were all trained and tested. The GAN model had the second highest accuracy of 72.68%, which was slightly under the LSTM model’s highest accuracy of 74.16%. For analyzing the GAN’s performance, 20k, 30k, and 50k epoch models were made, with the 50k epochs model performing the best.</p>
+<p>The paper authored by Labiad, Benabbou, and Berrado titled <em>Improving Stock Market Intraday Prediction by Generative Adversarial Neural Networks</em> <a href="#references">[2]</a> attempted to use a GAN to predict intraday stock prices. The initial dataset of intraday prices had noisy variations and inconsistent distance between consecutive points. To remedy this, the team discretized the data to have points spaced by 10 minute intervals, which led to an overall reduction in the number of observations. Additionally, mode-specific normalization was utilized to better capture the complex distribution within the data. As a result, the synthetic data generated has a much closer distribution to the real data, leading to overall better training of the discriminator and improved prediction.</p>
+</section>
+<section id="limitations-of-existing-approaches" class="level2">
+<h2 class="anchored" data-anchor-id="limitations-of-existing-approaches">Limitations of Existing Approaches</h2>
+<p>Currently, three primary solutions exist for predictions of time series stock market prices. They are the PCA-LSTM Model, Traditional GAN Model, and the Traditional GAN Model with BERT. Each of these have a series of limitations that our proposed approach seeks to imrpove upon and ultimately resolve entirely. The PCA-LSTM Model currently relies on an extremely trivial LSTM neural network for predictions solely based on technical indicators. We see this as an extreme limitation as the model is extremely simple and has no inclusion of fundamental analysis. To improve upon this simplicity, the Traditional GAN Model was created; however, is still limited by its lack of fundamental analysis and is typically prone to convergence failures and training instability. Finally, this traditional model has attempted to incorporate fundamental analysis by relying on BERT to offer fundamental analysis provided from biased news outlets, without any sentiment directly from the public. As such, we require that our model improves on these shortcomings by developing resistance to training instability and convergence failures as well as incorporate public sentiment from retail investors directly.</p>
+</section>
+</section>
+<section id="proposed-approach" class="level1">
+<h1>Proposed Approach</h1>
+<section id="problem-definition" class="level2">
+<h2 class="anchored" data-anchor-id="problem-definition">Problem Definition</h2>
+<p>Let <span class="math inline">\(F={f_1, f_2, \cdots , f_n}\)</span> be the set of <span class="math inline">\(n\)</span> features which will serve as input to the model. These features will include basic indicators (high, low, open, close, volume), sentiment analysis scores, and technical indicators (moving averages, relative strength index, etc.).</p>
+<p>Let <span class="math inline">\(W={w_1, w_2, \cdots , w_n}\)</span> be the set of <span class="math inline">\(n\)</span> weights which will be updated while training the model. The magnitude of <span class="math inline">\(n\)</span> will be determined by the feature engineering described in the following section.</p>
+<p>The prediction equation will be as follows:</p>
+<p><span class="math inline">\(stk\_price = F \odot W\)</span></p>
+<p>Where <span class="math inline">\(stk\_price\)</span> is the predicted closing stock price outputted by the model and <span class="math inline">\(\odot\)</span> denotes the Hadamard Product (more commonly described as component-wise multiplication).</p>
+<section id="project-pipeline-diagram" class="level3">
+<h3 class="anchored" data-anchor-id="project-pipeline-diagram">Project Pipeline Diagram</h3>
+<p><img src="ML Capstone Project Pipeline Diagram.png" class="img-fluid"></p>
+<p>Pictured above is the complete data pipeline for this project. The data processing and analyses are divided into two subcomponents, one detailing the fundamental analysis and the other detailing the technical analysis. The fundamental analysis includes evaluation of social media sentiment regarding the stock. Posts are scraped from social media outlets, processed via the NLTK Python library, and finally given sentiment scores by the VADER model. The scores for all posts within a day are then averaged. On the technical analysis side, basic indicators are first pulled from TDAmeritrade and used in various ways to compute a large set of technical indicators, including moving averages and similar. The expanded set of indicators will then be fed into an autoencoder model to produce a set of compressed features. After this process, we will have a condensed set of indicators to merge back with the original technical indicator set to feed into the prediction model. Finally, the expanded indicator set and the daily averaged sentiment scores will be merged and fed to the wGAN-GP prediction model. This model will output the predicted closing prices for the stock.</p>
+</section>
+</section>
+<section id="the-dataset" class="level2">
+<h2 class="anchored" data-anchor-id="the-dataset">The Dataset</h2>
+<p>With regards to the fundamental analysis side of the pipeline, tweets mentioning “$AAPL” and “AAPL” are scraped from Twitter. For the technical analysis portion, basic financial data for $AAPL and a number of comparative assets are pulled via the TDAmeritrade API. All data within our dataset spans from 05/09/2013 to 03/31/2023. For purposes of tuning the prediction model, the dataset was split 80:10:10, for the training, validation, and testing sets respectively.</p>
+</section>
+<section id="fundamental-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="fundamental-analysis">Fundamental Analysis</h2>
+<p>For sentiment analysis the text extracted from the social media webscraper must be cleaned so that such analysis can be conducted smoothly. Using the Python NLTK library, the text is tokenized and converted into lowercase. Stop-words (unimportant words), such as “the” and “is”, as well as any non-alphanumeric characters are stripped. Finally, the tokens are lemmatized.</p>
+<p>The pre-processed text from the Twitter posts is then given a sentiment score by the VADER model. Sentiment scores for each day are averaged, returning a final set of daily averaged sentiments from Twitter regarding.</p>
+</section>
+<section id="technical-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="technical-analysis">Technical Analysis</h2>
+<p>In this project, we will generate new features from the few basic indicators and score the averaged public sentiment score for each day. The basic indicators - high, low, open, close, and volume - will initially be utilized to compute various technical indicators. These technical indicators may include items such as the moving average, Bollinger Band, relative strength index, average directional index, moving average convergence divergence, and many more. Next, these features will be input into a variational autoencoder in order to produce a compressed representation of the input features, denoted as compressed features. The compressed features will be added to the original features to extend the feature space. The variational autoencoder will not be used for dimensionality reduction, as these compressed features will be served to the final model in addition to the original features. This is done in hopes that the compressed features will better highlight stock price movement patterns.</p>
+</section>
+<section id="model-architecture-descriptions" class="level2">
+<h2 class="anchored" data-anchor-id="model-architecture-descriptions">Model Architecture Descriptions</h2>
+<section id="social-media-webscraper" class="level3">
+<h3 class="anchored" data-anchor-id="social-media-webscraper">Social Media Webscraper</h3>
+<p>A python script was be developed to scrape data from Twitter. The is script was developed using the Scweet Python library. It searches tweets that mention the keywords “$AAPL” or “AAPL” and collects up to 100 of them for each day. Afterwards, the sentiment of each tweet is determined using VADER. The average sentiment amongst all tweets per day is calculated to get the sentiment of one day.</p>
+</section>
+<section id="vader-for-sentiment-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="vader-for-sentiment-analysis">VADER for Sentiment Analysis</h3>
+<p>VADER from the NLTK Python library will be used to classify our scraped media posts as negative or positive. The VADER model maps lexical features to sentiment scores via a dictionary. It is a rule-based sentiment analysis tool, which is explicitly sensitive to web-based media. Words are identified and marked as positive or negative, and these markings are utilized to compute a polarity score which identifies the overall sentiment of the message. Words with higher negative sentiment are mapped to negative scores of greater magnitude, and vice-versa. The same applies for words viewed as positive.</p>
+</section>
+<section id="wgan-gp-for-stock-price-prediction" class="level3">
+<h3 class="anchored" data-anchor-id="wgan-gp-for-stock-price-prediction">wGAN-GP for Stock Price Prediction</h3>
+<p>An improvement upon a traditional wGAN, which enforces a gradient norm penalty in the discriminator in order to achieve Lipschitz continuity, known as wGAN-GP is used for the prediction of the closing price of a stock. wGANs improve upon traditional gans with the use of the Wasserstein distance as the loss function, promoting stability in model training.</p>
+<p>GANs are composed of two main components: the generator and the discriminator. The generator will be a traditional LSTM (long short-term memory) network with input units equal to the number of features in the final dataset and 512 hidden units. Finally, there will be one linear layer with a single output detailing the closing price for each day.</p>
+<p>The discriminator is a CNN (convolutional neural network), chosen for its ability to extract complex patterns and trends from the dataset. The architecture is as follows, where <span class="math inline">\(RWS\)</span> denotes the rolling-window size:</p>
+<ol type="1">
+<li>1-Dimensional Convolutional Layer: <span class="math inline">\(RWS+1 \rightarrow 32\)</span></li>
+<li>1-Dimensional Convolutional Layer: <span class="math inline">\(32 \rightarrow 64\)</span></li>
+<li>LeakyReLU Layer</li>
+<li>1-Dimensional Convolutional Layer: <span class="math inline">\(64 \rightarrow 128\)</span></li>
+<li>LeakyReLU Layer</li>
+<li>1-Dimensional Convolutional Layer: <span class="math inline">\(128 \rightarrow 256\)</span></li>
+<li>LeakyReLU Layer</li>
+<li>Linear Layer: <span class="math inline">\(256 \rightarrow 256\)</span></li>
+<li>LeakyReLU Layer</li>
+<li>Linear Layer: <span class="math inline">\(256 \rightarrow 256\)</span></li>
+<li>Activation Layer</li>
+<li>Linear Layer: <span class="math inline">\(256 \rightarrow 1\)</span></li>
+</ol>
+<p>This model was tuned with a predefined grid search. Initially, a large set of possible parameters was tested on a small subset of the full dataset. For each incremental step afterwards, the ranges of the hyperparameters were decreased and tested with a larger subset of the dataset. In the final iteration, the model was evaluated on the full dataset.</p>
+</section>
+</section>
+</section>
+<section id="experimental-evaluation" class="level1">
+<h1>Experimental Evaluation</h1>
+<section id="dataset-exploration" class="level2">
+<h2 class="anchored" data-anchor-id="dataset-exploration">Dataset Exploration</h2>
+<section id="technical-analysis-1" class="level3">
+<h3 class="anchored" data-anchor-id="technical-analysis-1">Technical Analysis</h3>
+<p>The primary collection of technical data was derived from the TDAmeritrade API. With the Price History tool, TDAmeritrade would generate a JSON file of the price history for a given symbol over a specified period and frequency. For this project, we collected the daily price history over the last 10 years for our primary stock ($AAPL), comparative assets ($MSFT, $META, $AMZN, and $GOOGL), and an industry index ($SP500). This offered the Date, Open, Close, High, Low, and Volume for each security. From here, a series of technical indicators typically used by day and swing traders were calculated for $AAPL with the existing data. This included metrics such as: Stochastic Oscillators, Relative Strength Index, Simple Moving Averages for Close and Volume, and Moving Average Convergence/Divergence.</p>
+</section>
+<section id="fundamental-analysis-1" class="level3">
+<h3 class="anchored" data-anchor-id="fundamental-analysis-1">Fundamental Analysis</h3>
+<p>The fundamental analysis portion of this project was primarily based on analyzing the public sentiment of the Apple stock. The initial source of the data was Reddit. Using the PRAW Python library, a Reddit webscraper was built, which parsed the top 10 newest posts of the r/apple subreddit, and gathered the top 50 comments and up to 25 replies per comment. The text content of each post, comment, and reply were collected and then cleaned using the NLTK library. Their sentiment was determined using the VADER model. While this script was fully implemented, there was no way to gather data from previous dates, and therefore was not integrated within the pipeline. The second source of sentiment data was Twitter. Using the Scweet Python library, a script was written which collected up to 100 tweets per day and up to 10 replies per tweet. The only tweets gathered were those that had the keywords “$AAPL” or “AAPL”. The data was collected from January 1, 2013 to March 30, 2023. The same process was used to clean and calculate the sentiment of the tweet text content. Once the sentiment of each day was found, the final dataset was merged with the technical indicator dataset.</p>
+<p>Some preliminary visualizations were created to explore the sentiment dataset.</p>
+<p><img src="num tweets.png" class="img-fluid"></p>
+<p>In general, the number of tweets that mention the keywrods has decreased over time. One possible explanation of this is the novelty of the stock has decreased, and the general public has placed its attention in other stocks and securities, such as cryptocurrency.</p>
+<p><img src="twitter sentiment.png" class="img-fluid"></p>
+<p>Over our time frame, the sentiment of the stock has remained generally positive, staying above 0.0 for the grand majority of the time. It can be stated that Twitter users discussing the stock have an overal positive view of the company.</p>
+<p><img src="price change polarity correlation.png" class="img-fluid"></p>
+<p>Finally, we were curious to see if there was any correlation between the sentiment of the stock and the percent change in price of a given day. The scatterplot above illustrates that their is no relationship between the two, and can be said to be independent of each other.</p>
+</section>
+</section>
+<section id="prediction-results" class="level2">
+<h2 class="anchored" data-anchor-id="prediction-results">Prediction Results</h2>
+<section id="rolling-windows-and-sentiment-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="rolling-windows-and-sentiment-analysis">Rolling-windows and Sentiment Analysis</h3>
+<p>Depicted in the tables below are evaluation metrics of the returned prediction sets for running the wGAN-GP model with 3-day, 5-day, 7-day, and 10-day rolling windows. One table details the performance of the models with the inclusion of sentiment analysis as a feature, and the other without. The evaluation metrics included are: root-mean-square error (RMSE), normalized root-mean-square error (NRMSE), mean-absolute error (MAE), and mean-absolute-percentage error (MAPE). Note that the RMSE values are normalized to the range of the actual closing price range to gain the NRMSE values.</p>
+<section id="evaluation-metrics-without-sentiment-scores" class="level4">
+<h4 class="anchored" data-anchor-id="evaluation-metrics-without-sentiment-scores">Evaluation Metrics (without Sentiment Scores)</h4>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Rolling-Window Size</th>
+<th>RMSE</th>
+<th>NRMSE</th>
+<th>MAE</th>
+<th>MAPE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>3-day</td>
+<td>4.616</td>
+<td>0.092</td>
+<td>3.632</td>
+<td>0.024</td>
+</tr>
+<tr class="even">
+<td>5-day</td>
+<td>5.064</td>
+<td>0.101</td>
+<td>3.991</td>
+<td>0.027</td>
+</tr>
+<tr class="odd">
+<td>7-day</td>
+<td>5.463</td>
+<td>0.109</td>
+<td>4.348</td>
+<td>0.029</td>
+</tr>
+<tr class="even">
+<td>10-day</td>
+<td>5.841</td>
+<td>0.117</td>
+<td>4.611</td>
+<td>0.031</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="evaluation-metrics-with-sentiment-scores" class="level4">
+<h4 class="anchored" data-anchor-id="evaluation-metrics-with-sentiment-scores">Evaluation Metrics (with Sentiment Scores)</h4>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Rolling-Window Size</th>
+<th>RMSE</th>
+<th>NRMSE</th>
+<th>MAE</th>
+<th>MAPE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>3-day</td>
+<td>4.401</td>
+<td>0.088</td>
+<td>3.447</td>
+<td>0.023</td>
+</tr>
+<tr class="even">
+<td>5-day</td>
+<td>4.754</td>
+<td>0.095</td>
+<td>3.743</td>
+<td>0.025</td>
+</tr>
+<tr class="odd">
+<td>7-day</td>
+<td>5.271</td>
+<td>0.105</td>
+<td>4.233</td>
+<td>0.028</td>
+</tr>
+<tr class="even">
+<td>10-day</td>
+<td>5.411</td>
+<td>0.108</td>
+<td>4.329</td>
+<td>0.029</td>
+</tr>
+</tbody>
+</table>
+<p>From an initial evaluation, it appears that the inclusion of daily sentiment score averages as a feature to the prediction model resulted in a slight increase in the accuracy of the predicted closing price. With some more calculations, we can quantify this increased accuracy as a percentage, seen in the table below.</p>
+</section>
+<section id="percentage-change-in-evaluation-metrics" class="level4">
+<h4 class="anchored" data-anchor-id="percentage-change-in-evaluation-metrics">Percentage Change in Evaluation Metrics</h4>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Rolling-Window Size</th>
+<th>RMSE</th>
+<th>NRMSE</th>
+<th>MAE</th>
+<th>MAPE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>3-day</td>
+<td>-4.668</td>
+<td>-4.668</td>
+<td>-5.09</td>
+<td>-4.763</td>
+</tr>
+<tr class="even">
+<td>5-day</td>
+<td>-6.117</td>
+<td>-6.117</td>
+<td>-6.205</td>
+<td>-6.741</td>
+</tr>
+<tr class="odd">
+<td>7-day</td>
+<td>-3.511</td>
+<td>-3.511</td>
+<td>-2.633</td>
+<td>-2.400</td>
+</tr>
+<tr class="even">
+<td>10-day</td>
+<td>-7.366</td>
+<td>-7.366</td>
+<td>-6.112</td>
+<td>-5.627</td>
+</tr>
+</tbody>
+</table>
+<p>So, with some final averaging, this gives us an average percentage change of −5.415% for RMSE and NRMSE, −5.010% for MAE, and −4.882% for MAPE when including sentiment scores as a feature in the prediction model.</p>
+<p>Conclusively, we see around a 5% more accurate prediction when sentiment analysis is included in the prediction process. This follows with our initial assumptions that public sentiment is beneficial to accurately predicting the stock market’s daily movements. Though it is only a slight increase, it is believed that with better scraping and data-cleaning capabilities, the model could better harness public sentiment for even more accurate predictions. For instance, removing or filtering out more insignificant or misdirecting media posts could better gauge public sentiment for these purposes, likely leading to increased accuracy in the prediction model.</p>
+</section>
+</section>
+<section id="best-predictions" class="level3">
+<h3 class="anchored" data-anchor-id="best-predictions">Best Predictions</h3>
+<p>The best prediction set returned by the model was with a 3-day sliding window, including sentiment scored from Twitter. The model takes 3 days of basic indicators as input and outputs the predicted closing price of the 4th day. After tuning, the following hyperparameters were chosen for their performance on the validation set:</p>
+<ol type="a">
+<li>Batch Size = 65</li>
+<li>Learning Rate = 0.00005</li>
+<li>Critic Training Iterations per Generator Iteration = 5</li>
+<li>Epochs = 150</li>
+</ol>
+<p>Additionally, RMSProp, or root-mean-square propagation, was used as the optimization algorithm for the model. Visualizations of the generator and discriminator losses follow.</p>
+<p><img src="3day_discLoss.png" class="img-fluid"></p>
+<p><img src="3day_genLoss.png" class="img-fluid"></p>
+<p>The discriminator loss appears to converge approximately to 0, while the generator loss appears to converge approximately to 5. These exact values are mostly unimportant. However, it is important to note that, for this dataset, the losses do appear to converge. In prior versions of the model, the losses did not ever converge. This improvement is thought to be due to the implementation of the gradient penalty, in order to enforce the Lipschitz contraint in the discriminator. The usage of the wGAN-GP model’s improvements to training stability and convergence is likely to credit for this result. Evaluation of the model’s stock price predictions are detailed below.</p>
+<p><img src="3day_trainpreds.png" class="img-fluid"></p>
+<p><img src="3day_valandtestpreds.png" class="img-fluid"></p>
+<p>For the training dataset, the model returned predictions with an RMSE of 0.779. The model seems capable of identifying the movement of the stock price and accurately predicting the magnitude of said movement. The inclusion of various technical indicators and sentiment analysis scores improved this greatly from previous iterations of the model.</p>
+<p>Regarding the validation and testing datasets, the model returned predictions with an averaged RMSE of 4.401 or 0.088 when normalized to the range of the true closing price values. This is a bit higher than that on the training set, indicating a bit of overfitting in the model. Further tuning may be requiring to hone in on a bettergeneralized model. Despite this, the model still performs well in identifying stock price movements and even comes fairly close to the magnitude of the movement, returning an averaged MAE of 3.447 on these sets.</p>
+<p>Taking in the scale of the predicted values, the RMSE appears quite good. Conclusively, the model achieved predictions within an error of about $3.50 or 2.3% off of the actual stock price on average. Although not entirely useful for day trading, this model could prove useful in longer-termed swing trades.</p>
+</section>
+</section>
+</section>
+<section id="future-work" class="level1">
+<h1>Future Work</h1>
+<p>Many potential avenues can be explored by future teams wishing to expand upon our project. The biggest improvement would be to modify our data collection scripts and pipeline to implement online learning capabilities. This means that our model will continually collect data every day to further improve its prediction power and avoid degradation. Additionally, while the Reddit webscraper can be easily adapted to continually scrape daily, data going back to 2013 must be collected, which can potentially done by using the <a href="https://reddit-api.readthedocs.io/en/latest/">Pushshift</a> Reddit API.</p>
+<p>The fundamental analysis aspect of our pipeline can be expanded to gather sentiment from other social media platforms, such as Facebook. This would create additional features that the model could use to make better predictions. The model can also be applied to additional stocks and commodities, such as Meta or gold. This would broaden its applicability in the real world.</p>
+<p>When we began the project, we initially wanted to make a model that was capable of doing intraday predictions. We ultimately decided to only do daily predictions, since the original approach would require exponentially more data and more computational power. It is definitely possible to create such a model using our current codebase, since the TDAmeritrade API allows for the collection of intraday technical indicators, and the webscraping scripts can be augmented with logic to separate out intraday intervals. Ultimately, a substantial amount of computing resources would be required to achieve such a model.</p>
+</section>
+<section id="conclusion" class="level1">
+<h1>Conclusion</h1>
+<p>Through the implementation of a wGAN-GP model and incorporation of sentiment from retail investors, our model was able to yield promising results that may be difficult to rely on for single day trading, yet extremely useful for longer-termed swing trades. As expected from our literature review, the model saw its strongest performance with a 3-day sliding window and the inclusion of sentiment scores from Titter. Ultimately, our final model saw an RMSE of 4.401 and an NRMSE of 0.088, translating to our model achieving predictions within an error of $3.50 or 2.3% off the actual stock price on average.</p>
+</section>
+<section id="references" class="level1">
+<h1>References</h1>
+<p>[1] Boris Banushev. 2019. Using the Latest Advancements in Deep Learning to Predict Stock Price Movements. Medium (Jan.&nbsp;2019).<br>
+[2] Badre Labiad, Loubna Benabbou, and Abdelaziz Berrado. 2022. Improving Stock Market Intraday Prediction by Generative Adversarial Neural Networks. (March 2022).<br>
+[3] Ragu Moha. 2018. The Bots of Wall Street. Hacker Earth (Jan.&nbsp;2018).<br>
+[4] Ricardo Alberto Carrillo Romero. 2019. Generative Adversarial Network for Stock Market Price Prediction. (2019).<br>
+[5] Priyank Sonkiya, Vikas Bajpai, and Anukriti Bansal. 2021. Stock price prediction using BERT and GAN. (July 2021).<br>
+[6] Yulian Wen. 2020. Research of Stock Price Prediction Based on PCA-LSTM Model. (April 2020).</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
