@@ -2,8 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
-      "/projects/post-with-code/index.html",
-      "/projects/welcome/index.html",
+      "/projects/VAE-Generation/index.html",
       "/projects/governmentSurveillance/index.html",
       "/projects/wGAN-stock-predictions/index.html",
       "/projects/OT-pushRelabel/index.html",
