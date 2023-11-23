@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Shayne Biagi">
+<meta name="dcterms.date" content="2023-11-03">
+
+<title>Shayne Biagi - Exploring Ceramic Composition with K-Means Clustering</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="https://biagishedu.github.io/">
+    <span class="navbar-title">Shayne Biagi</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools ms-auto tools-wide">
+    <a href="https://biagishedu.github.io/" rel="" title="Home" class="quarto-navigation-tool px-1" aria-label="Home"><i class="bi bi-house-fill"></i></a>
+    <a href="../../index.html" rel="" title="Project Archive" class="quarto-navigation-tool px-1" aria-label="Project Archive"><i class="bi bi-archive-fill"></i></a>
+    <a href="https://github.com/biagishEDU" rel="" title="My Github" class="quarto-navigation-tool px-1" aria-label="My Github"><i class="bi bi-github"></i></a>
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Exploring Ceramic Composition with K-Means Clustering</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">code</div>
+                <div class="quarto-category">machine learning</div>
+                <div class="quarto-category">clustering</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Shayne Biagi </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">November 3, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#unsupervised-learning" id="toc-unsupervised-learning" class="nav-link active" data-scroll-target="#unsupervised-learning">Unsupervised Learning</a></li>
+  <li><a href="#k-means" id="toc-k-means" class="nav-link" data-scroll-target="#k-means">K-Means</a></li>
+  <li><a href="#imports" id="toc-imports" class="nav-link" data-scroll-target="#imports">Imports</a></li>
+  <li><a href="#data-preprocessing" id="toc-data-preprocessing" class="nav-link" data-scroll-target="#data-preprocessing">Data Preprocessing</a></li>
+  <li><a href="#applying-k-means-clustering" id="toc-applying-k-means-clustering" class="nav-link" data-scroll-target="#applying-k-means-clustering">Applying K-Means Clustering</a></li>
+  <li><a href="#evaluation-with-visualizations" id="toc-evaluation-with-visualizations" class="nav-link" data-scroll-target="#evaluation-with-visualizations">Evaluation with Visualizations</a></li>
+  <li><a href="#visualizing-k-means-iterations" id="toc-visualizing-k-means-iterations" class="nav-link" data-scroll-target="#visualizing-k-means-iterations">Visualizing K-Means Iterations</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p>Spanning centuries of craftsmanship and art, the world of ceramics provides us with unique insights into artisans of the past. Today, we will delve into the realm of historic pottery samples, seeking to unravel the latent structures within the chemical compositions of their glazes and bodies.</p>
+<p>Ceramic materials embody a diverse array of molecules, each contributing something unique to the look and feel of a finished product. Traditional methods of identifying ceramic samples would often rely heavily on expert knowledge and visual inspection, but in the modern era of data-driven research, the potential to uncover hidden patterns through computational methods becomes increasingly promising.</p>
+<p>For this project, we will be using a dataset, available from the UCI Machine Learning Repository, titled “Chemical Composition of Ceramic Samples”. This dataset details 88 total samples of ceramic pieces from the the Longquan and Jingdezhen kilns. The samples are of one of the earliest types of porcelain from ancient China. Dating back thousands of years, the Longquan (and later the Jingdezhen) kiln became a hot-spot for celadon production. During the Ming Dynasty, the Chinese government invested heavily into these kilns to promote the craftsmanship and trade of this precious product. These samples of celadon were examined by an energy dispersive X-ray fluorescence microprobe to detect the chemical compositions of the bodies and glazes. The percentage composition (either by weight, or ppm) of the compounds identified in the samples are the features of our dataset. Each sample is also categorized as being part of the body or the glaze.</p>
+<p>The .csv file we will be using can be found <a href="https://archive.ics.uci.edu/dataset/583/chemical+composition+of+ceramic+samples">here</a>.</p>
+<p>Throughout this post, we will apply the classic K-Means clustering algorithm as a tool for discerning underlying patterns within our dataset and leverage the algorithm’s ability to identify clusters for our ceramic sample types. We hope to distinguish pieces of the body from pieces of the glaze.</p>
+<section id="unsupervised-learning" class="level1">
+<h1>Unsupervised Learning</h1>
+<p>K-Means is a popular unsupervised learning algorithm, but why is it ‘unsupervised’? In machine learning, there exist many different types of learning tasks. Some of these include Unsupervised, Semi-Supervised, and Supervised learning. Unsupervised learning tasks involve exploring and understanding the inherent patterns in a dataset without utilizing the labels. Instead of trying to draw connections between the features and the labels, unsupervised techniques try to unveil the hidden structure of the features without any regard to the labels.</p>
+<p>Today, we will use unsupervised learning for clustering. The K-Means clustering algorithm aims to group similar data points together based on feature similarities. This will allow us to separate the dataset into distinct clusters, where items within a cluster are more similar to each other than those in other clusters. For our project, this means evaluating the similarities and differences in the chemical compositions of ceramic samples in order to group them into clusters.</p>
+</section>
+<section id="k-means" class="level1">
+<h1>K-Means</h1>
+<p>So, how does K-Means do this? The K-Means algorithm will begin by randomly selecting K initial cluster centroids from the dataset. It will then assign each data point to the cluster whose centroid is the closest. Normally, the Euclidean distance is used to evaluate the closeness of data points. The centroid of the clusters are then recomputed as the mean of all data points within the given cluster. The assignment and centroid computations iteratively repeat until the model converges and these steps no longer change the assignments between iterations. Once convergence is reached, all data points will be clustered into exactly K clusters.</p>
+<p>The graphic below details a bit of what we are looking for when using K-Means. <img src="./data/kmeans.png" class="img-fluid" alt="image.png"></p>
+</section>
+<section id="imports" class="level1">
+<h1>Imports</h1>
+<p>With the background information covered, let’s start off as most projects do and work through the imports we will need. First off, we will need pandas and numpy to work with our data, as well as seaborn and matplotlib for some visualizations. Finally, we will be using sklearn for the KMeans clustering model and some data preprocessing. The PCA module is used at the end to aid in some visualizations as well.</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Imports</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sklearn <span class="im">as</span> sk</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> KMeans</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.decomposition <span class="im">import</span> PCA</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>With the packages imported, we can now read in the data to take a look at it</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read in data</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">"./data/Chemical Composion of Ceramic.csv"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>data.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Ceramic Name</th>
+<th data-quarto-table-cell-role="th">Part</th>
+<th data-quarto-table-cell-role="th">Na2O</th>
+<th data-quarto-table-cell-role="th">MgO</th>
+<th data-quarto-table-cell-role="th">Al2O3</th>
+<th data-quarto-table-cell-role="th">SiO2</th>
+<th data-quarto-table-cell-role="th">K2O</th>
+<th data-quarto-table-cell-role="th">CaO</th>
+<th data-quarto-table-cell-role="th">TiO2</th>
+<th data-quarto-table-cell-role="th">Fe2O3</th>
+<th data-quarto-table-cell-role="th">MnO</th>
+<th data-quarto-table-cell-role="th">CuO</th>
+<th data-quarto-table-cell-role="th">ZnO</th>
+<th data-quarto-table-cell-role="th">PbO2</th>
+<th data-quarto-table-cell-role="th">Rb2O</th>
+<th data-quarto-table-cell-role="th">SrO</th>
+<th data-quarto-table-cell-role="th">Y2O3</th>
+<th data-quarto-table-cell-role="th">ZrO2</th>
+<th data-quarto-table-cell-role="th">P2O5</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>FLQ-1-b</td>
+<td>Body</td>
+<td>0.62</td>
+<td>0.38</td>
+<td>19.61</td>
+<td>71.99</td>
+<td>4.84</td>
+<td>0.31</td>
+<td>0.07</td>
+<td>1.18</td>
+<td>630</td>
+<td>10</td>
+<td>70</td>
+<td>10</td>
+<td>430</td>
+<td>0</td>
+<td>40</td>
+<td>80</td>
+<td>90</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>FLQ-2-b</td>
+<td>Body</td>
+<td>0.57</td>
+<td>0.47</td>
+<td>21.19</td>
+<td>70.09</td>
+<td>4.98</td>
+<td>0.49</td>
+<td>0.09</td>
+<td>1.12</td>
+<td>380</td>
+<td>20</td>
+<td>80</td>
+<td>40</td>
+<td>430</td>
+<td>-10</td>
+<td>40</td>
+<td>100</td>
+<td>110</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>FLQ-3-b</td>
+<td>Body</td>
+<td>0.49</td>
+<td>0.19</td>
+<td>18.60</td>
+<td>74.70</td>
+<td>3.47</td>
+<td>0.43</td>
+<td>0.06</td>
+<td>1.07</td>
+<td>420</td>
+<td>20</td>
+<td>50</td>
+<td>50</td>
+<td>380</td>
+<td>40</td>
+<td>40</td>
+<td>80</td>
+<td>200</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>FLQ-4-b</td>
+<td>Body</td>
+<td>0.89</td>
+<td>0.30</td>
+<td>18.01</td>
+<td>74.19</td>
+<td>4.01</td>
+<td>0.27</td>
+<td>0.09</td>
+<td>1.23</td>
+<td>460</td>
+<td>20</td>
+<td>70</td>
+<td>60</td>
+<td>380</td>
+<td>10</td>
+<td>40</td>
+<td>70</td>
+<td>210</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>FLQ-5-b</td>
+<td>Body</td>
+<td>0.03</td>
+<td>0.36</td>
+<td>18.41</td>
+<td>73.99</td>
+<td>4.33</td>
+<td>0.65</td>
+<td>0.05</td>
+<td>1.19</td>
+<td>380</td>
+<td>40</td>
+<td>90</td>
+<td>40</td>
+<td>360</td>
+<td>10</td>
+<td>30</td>
+<td>80</td>
+<td>150</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Using the head() function from pandas, we can get an idea of how our dataframe looks. We can see that we have categorical variables for ‘Ceramic Name’ which describes the sample, as well as ‘Part’ which tells us what part of the celadon which the sample comes from (either from the body or from the glaze). The next 17 columns describe the percentages of molecules found in the sample and are real-valued. The molecules along with the measurement type (percentage composition by weight or ppm) are:</p>
+<ul>
+<li><p>Na2O (wt%)</p></li>
+<li><p>MgO (wt%)</p></li>
+<li><p>Al2O3 (wt%)</p></li>
+<li><p>SiO2 (wt%)</p></li>
+<li><p>K2O (wt%)</p></li>
+<li><p>CaO (wt%)</p></li>
+<li><p>TiO2 (wt%)</p></li>
+<li><p>Fe2O3 (wt%)</p></li>
+<li><p>MnO (ppm)</p></li>
+<li><p>CuO (ppm)</p></li>
+<li><p>ZnO (ppm)</p></li>
+<li><p>PbO2 (ppm)</p></li>
+<li><p>Rb2O (ppm)</p></li>
+<li><p>SrO (ppm)</p></li>
+<li><p>Y2O3 (ppm)</p></li>
+<li><p>ZrO2 (ppm)</p></li>
+<li><p>P2O5 (ppm)</p></li>
+</ul>
+</section>
+<section id="data-preprocessing" class="level1">
+<h1>Data Preprocessing</h1>
+<p>So, we can see that our real-valued features are of two different scales (this will come into play later). For our task, the ‘Ceramic Name’ feature is simply unneeded, so we can just drop it from our set. Also, since ‘Part’ is categorical, lets encode it as a binary feature, where 1 indicates ‘Body’ and 0 indicates ‘Glaze’.</p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Encode categorical feature</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>data[<span class="st">'Part'</span>] <span class="op">=</span> data[<span class="st">'Part'</span>].<span class="bu">map</span>({<span class="st">'Body'</span>:<span class="dv">1</span>, <span class="st">'Glaze'</span>:<span class="dv">0</span>})</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Drop unneeded 'Ceramic Name'</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> data.drop([<span class="st">'Ceramic Name'</span>], axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>data.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Part</th>
+<th data-quarto-table-cell-role="th">Na2O</th>
+<th data-quarto-table-cell-role="th">MgO</th>
+<th data-quarto-table-cell-role="th">Al2O3</th>
+<th data-quarto-table-cell-role="th">SiO2</th>
+<th data-quarto-table-cell-role="th">K2O</th>
+<th data-quarto-table-cell-role="th">CaO</th>
+<th data-quarto-table-cell-role="th">TiO2</th>
+<th data-quarto-table-cell-role="th">Fe2O3</th>
+<th data-quarto-table-cell-role="th">MnO</th>
+<th data-quarto-table-cell-role="th">CuO</th>
+<th data-quarto-table-cell-role="th">ZnO</th>
+<th data-quarto-table-cell-role="th">PbO2</th>
+<th data-quarto-table-cell-role="th">Rb2O</th>
+<th data-quarto-table-cell-role="th">SrO</th>
+<th data-quarto-table-cell-role="th">Y2O3</th>
+<th data-quarto-table-cell-role="th">ZrO2</th>
+<th data-quarto-table-cell-role="th">P2O5</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>1</td>
+<td>0.62</td>
+<td>0.38</td>
+<td>19.61</td>
+<td>71.99</td>
+<td>4.84</td>
+<td>0.31</td>
+<td>0.07</td>
+<td>1.18</td>
+<td>630</td>
+<td>10</td>
+<td>70</td>
+<td>10</td>
+<td>430</td>
+<td>0</td>
+<td>40</td>
+<td>80</td>
+<td>90</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>1</td>
+<td>0.57</td>
+<td>0.47</td>
+<td>21.19</td>
+<td>70.09</td>
+<td>4.98</td>
+<td>0.49</td>
+<td>0.09</td>
+<td>1.12</td>
+<td>380</td>
+<td>20</td>
+<td>80</td>
+<td>40</td>
+<td>430</td>
+<td>-10</td>
+<td>40</td>
+<td>100</td>
+<td>110</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>1</td>
+<td>0.49</td>
+<td>0.19</td>
+<td>18.60</td>
+<td>74.70</td>
+<td>3.47</td>
+<td>0.43</td>
+<td>0.06</td>
+<td>1.07</td>
+<td>420</td>
+<td>20</td>
+<td>50</td>
+<td>50</td>
+<td>380</td>
+<td>40</td>
+<td>40</td>
+<td>80</td>
+<td>200</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>1</td>
+<td>0.89</td>
+<td>0.30</td>
+<td>18.01</td>
+<td>74.19</td>
+<td>4.01</td>
+<td>0.27</td>
+<td>0.09</td>
+<td>1.23</td>
+<td>460</td>
+<td>20</td>
+<td>70</td>
+<td>60</td>
+<td>380</td>
+<td>10</td>
+<td>40</td>
+<td>70</td>
+<td>210</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>1</td>
+<td>0.03</td>
+<td>0.36</td>
+<td>18.41</td>
+<td>73.99</td>
+<td>4.33</td>
+<td>0.65</td>
+<td>0.05</td>
+<td>1.19</td>
+<td>380</td>
+<td>40</td>
+<td>90</td>
+<td>40</td>
+<td>360</td>
+<td>10</td>
+<td>30</td>
+<td>80</td>
+<td>150</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Great! Now, we can pull out the ‘Part’ column from the set since our task is unsupervised.</p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Store labels separately</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>labels <span class="op">=</span> data[<span class="st">'Part'</span>].copy()</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Drop labels from data</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> data.drop([<span class="st">'Part'</span>], axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>labels</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>0     1
+1     1
+2     1
+3     1
+4     1
+     ..
+83    0
+84    0
+85    0
+86    0
+87    0
+Name: Part, Length: 88, dtype: int64</code></pre>
+</div>
+</div>
+<p>Since our features are scaled differently, and the euclidean distance metric will be heavily affected by this, we can scale our data equally using sklearn’s MinMaxScaler().</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>scaler <span class="op">=</span> sk.preprocessing.MinMaxScaler()</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>scaled_features <span class="op">=</span> scaler.fit_transform(data.values)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>scaled_features</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<pre><code>array([[0.31891892, 0.248     , 0.54743083, ..., 0.33333333, 0.08823529,
+        0.02564103],
+       [0.29189189, 0.32      , 0.65151515, ..., 0.33333333, 0.14705882,
+        0.03846154],
+       [0.24864865, 0.096     , 0.48089592, ..., 0.33333333, 0.08823529,
+        0.09615385],
+       ...,
+       [0.10810811, 0.136     , 0.1113307 , ..., 0.33333333, 0.20588235,
+        0.27564103],
+       [0.05945946, 0.312     , 0.08695652, ..., 0.33333333, 0.23529412,
+        0.67307692],
+       [0.05945946, 0.448     , 0.19433465, ..., 0.33333333, 0.17647059,
+        0.41025641]])</code></pre>
+</div>
+</div>
+<p>Our features are now scaled properly for the model. To finish up, we can set X (features) and y (labels).</p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> scaled_features</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> labels.values</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="applying-k-means-clustering" class="level1">
+<h1>Applying K-Means Clustering</h1>
+<p>With the processing now done, we can fit our clustering algorithm to the data. For this, we will first need to create the K-Means model from sklearn. To instantiate our model, we will need to provide it with some parameters first.</p>
+<p>Remember how K-Means clusters data points into K distinct clusters? Well, we now have to tell it how many clusters we want it to find. Our goal is to try and cluster the ceramic samples by type (body or glaze), so we are going to tell K-Means to find 2 clusters in our dataset with the <em>n_clusters</em> parameter. Also, we will define <em>n_init</em> to tell the model how many times to run the algorithm with different initial centroids. The best model from all the runs will be the model we get out. A standard K-Means algorithm uses random initial centroids, so we may get different results across runs. To change this a bit, we will set <em>init</em> to change the centroid initialization method. Instead of random, we can use the k-means++ method which selects centroids with sampling based on an empirical probability distribution of each points contribution to the overall inertia. In K-Means clustering, inertia is a metric used to assess how well the data points within a cluster are grouped around their centroid. Inertia is defined as the sum of the squared distances between each data point in a cluster and the centroid of that cluster. In sklearn, the k-means++ method is actually greedy k-means++ which makes several trials at each sampling step and choosing the best centroid. Finally, we set <em>max_iter</em> to an arbitrarily high value, giving the model time to converge. <em>verbose</em> is set to 1 so that we get some outputs when we fit the model.</p>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the K-Means Model</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>kmeans_model <span class="op">=</span> KMeans(n_clusters <span class="op">=</span> <span class="dv">2</span>,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>                      n_init <span class="op">=</span> <span class="st">'auto'</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>                      init <span class="op">=</span> <span class="st">'k-means++'</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>                      max_iter <span class="op">=</span> <span class="dv">500</span>,</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>                      verbose <span class="op">=</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Next, we can fit our model. We will use the model’s fit() function to fit it. We must provide the features to the fit method for the model to use when training. This is easy. Just put <em>X</em> inside the fit call.</p>
+<p>After the model finished fitting, we can get the cluster assignments through the model’s <em>labels_</em> property. The underscore at the end indicates that this is a learned property which only has meaning after the model has been fit.</p>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit the model</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>kmeans_model.fit(X)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Get cluster assignments for data</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>clusters <span class="op">=</span> kmeans_model.labels_</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>clusters</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Initialization complete
+Iteration 0, inertia 84.44756352990454.
+Iteration 1, inertia 50.70926171516276.
+Converged at iteration 1: strict convergence.</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<pre><code>array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])</code></pre>
+</div>
+</div>
+<p>After the model is fitted, we get the cluster assignments. From the output above, we can see what those assignments are. Also, we can see how the inertia was minimized by the algorithm and thus decreases in successive iterations.</p>
+<p>Here, it is important to note that these cluster assignments have no tie to the original labels. In other words, a cluster assignment label of 1 does not necessarily mean that the data point <em>is</em> part of the body of a ceramic sample. These cluster assignments are simply what the K-Means model thinks is correct after it has been trained. The data points in cluster 1 are just the most similar (by way of euclidean distance) to other data points within its own cluster, and dissimilar from those in cluster 0.</p>
+</section>
+<section id="evaluation-with-visualizations" class="level1">
+<h1>Evaluation with Visualizations</h1>
+<p>To get an idea of what the clusters assignments mean, we can plot the data points and color them by their cluster assignment. Then, we can compare that to a plot of the data points colored by their true label (body or glaze) and see if K-Means was able to cluster the points together by ceramic sample type. To do this, however, we need to reduce the dimensionality of our feature-set to something that we can visually comprehend. The easiest way to do this is to squish the features down from 17 dimensions down to 2. In 2 dimensions, we can simply plot it on a 2D coordinate plane. How can we do this?</p>
+<p>This is where principal component analysis (PCA) comes in. PCA tries to identify a new set of axes (components) which captures the most variation in the data. This allows us to reduce dimensionality while preserving the most essential characteristics of the input data. To use PCA, we can just create a PCA() object and tell it to reduce to 2 components (for a 2D visualization). Then, we can call the fit_transform() method with <em>X</em> to get out out our 2 principal components.</p>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create PCA</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>pca <span class="op">=</span> PCA(n_components<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit PCA and transform X into principal components</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>components <span class="op">=</span> pca.fit_transform(X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now, we can build our plot using the first component as x and the second component as y. Additionally, we can add some styling to make our plot visually pleasing.</p>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get 2 Principal Components</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>component_1 <span class="op">=</span> components[:, <span class="dv">0</span>]</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>component_2 <span class="op">=</span> components[:, <span class="dv">1</span>]</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Create dataframe for plot</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>cluster_data <span class="op">=</span> pd.DataFrame({<span class="st">'Principal Component 1'</span> : component_1,</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>                             <span class="st">'Principal Component 2'</span> : component_2,</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>                             <span class="st">'Clusters'</span> : clusters})</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Set sns styling</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>sns.<span class="bu">set</span>(style<span class="op">=</span><span class="st">'darkgrid'</span>,</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>        font_scale <span class="op">=</span> <span class="fl">1.4</span>)</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize with scatterplot</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">8</span>), dpi<span class="op">=</span><span class="dv">300</span>)</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(data <span class="op">=</span> cluster_data,</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>                x <span class="op">=</span> <span class="st">'Principal Component 1'</span>,</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>                y <span class="op">=</span> <span class="st">'Principal Component 2'</span>,</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>                hue <span class="op">=</span> <span class="st">'Clusters'</span>,</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>                style <span class="op">=</span> <span class="st">'Clusters'</span>,</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>                palette<span class="op">=</span><span class="st">'pastel'</span>,</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>                s <span class="op">=</span> <span class="dv">150</span>,</span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>                markers<span class="op">=</span>[<span class="st">'o'</span>, <span class="st">'^'</span>])</span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Add plot styling</span></span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Principal Component 1'</span>)</span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Principal Component 2'</span>)</span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Principal Components Colored By Cluster Assignment'</span>)</span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>plt.legend(loc <span class="op">=</span> <span class="st">'lower right'</span>, title <span class="op">=</span> <span class="st">'Cluster'</span>)</span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-12-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Next, do the same plot as above, but instead of cluster assignments, we will use the actual labels from the original dataset.</p>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create dataframe for plot</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>label_data <span class="op">=</span> pd.DataFrame({<span class="st">'Principal Component 1'</span> : component_1,</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>                           <span class="st">'Principal Component 2'</span> : component_2,</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>                           <span class="st">'Part'</span> : labels})</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Set sns styling</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>sns.<span class="bu">set</span>(style<span class="op">=</span><span class="st">'darkgrid'</span>,</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>        font_scale <span class="op">=</span> <span class="fl">1.4</span>)</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize with scatterplot</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">8</span>), dpi<span class="op">=</span><span class="dv">300</span>)</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(data <span class="op">=</span> label_data,</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>                x <span class="op">=</span> <span class="st">'Principal Component 1'</span>,</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>                y <span class="op">=</span> <span class="st">'Principal Component 2'</span>,</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>                hue <span class="op">=</span> <span class="st">'Part'</span>,</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>                style <span class="op">=</span> <span class="st">'Part'</span>,</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>                palette<span class="op">=</span><span class="st">'pastel'</span>,</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>                s <span class="op">=</span> <span class="dv">150</span>,</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>                markers<span class="op">=</span>[<span class="st">'o'</span>, <span class="st">'^'</span>])</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Add plot styling</span></span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Principal Component 1'</span>)</span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Principal Component 2'</span>)</span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Principal Components Colored By Original Label'</span>)</span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>plt.legend(loc <span class="op">=</span> <span class="st">'lower right'</span>, title <span class="op">=</span> <span class="st">'Part'</span>, labels<span class="op">=</span>[<span class="st">'Body'</span>, <span class="st">'Glaze'</span>])</span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-13-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Woah, those look exactly the same. This means that our clustering algorithm worked quite well. We can see that K-Means perfectly split up our samples into one cluster for body samples and one cluster for glaze samples just by chemical composition.</p>
+<p>With these plots, we can also conclude that cluster 0 maps directly to glaze parts, and cluster 1 maps directly to body parts. And, each sample was clustered correctly with respect to the ceramic sample type.</p>
+</section>
+<section id="visualizing-k-means-iterations" class="level1">
+<h1>Visualizing K-Means Iterations</h1>
+<p>Our project is pretty much done at this point, but let’s take a second to try and understand what K-Means is doing behind the scenes. To do this, we will try and manually iterate the K-Means algorithm.</p>
+<p>Here, we set a for loop to run 5 iterations. For each iteration, we will create a new K-Means model and only do a single run, by setting <em>n_init</em> to 1 and only having it do a single iteration with <em>max_iter</em> set to one. We will then fit the model, store the centroids for the next for loop iteration, save the model to the models array, and print the inertia for each iteration. <em>init</em> will be set to k-means++ initially, and then set to the centroids from the previous iteration for successive loops. The random state is set in order to make this reproducible for any readers.</p>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>iterations <span class="op">=</span> <span class="dv">5</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>centroids <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>models <span class="op">=</span> []</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(iterations):</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Set centroids to previous iteration's centroids if they exits</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># If this is the first iteration, then set it to k-means++</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    p_centroids <span class="op">=</span> centroids</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (p_centroids <span class="kw">is</span> <span class="va">None</span>): p_centroids <span class="op">=</span> <span class="st">'k-means++'</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Build model</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    kmeans_model <span class="op">=</span> KMeans(n_clusters <span class="op">=</span> <span class="dv">2</span>,</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>                          n_init <span class="op">=</span> <span class="dv">1</span>,</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>                          init <span class="op">=</span> p_centroids,</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>                          max_iter <span class="op">=</span> <span class="dv">1</span>,</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>                          random_state<span class="op">=</span><span class="dv">8</span>)</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Fit model</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>    kmeans_model.fit(X)</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Store centroids for next iter</span></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>    centroids <span class="op">=</span> kmeans_model.cluster_centers_</span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Save model</span></span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>    models.append(kmeans_model)</span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Print inertia</span></span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f'Iteration </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">, intertia </span><span class="sc">{</span>kmeans_model<span class="sc">.</span>inertia_<span class="sc">}</span><span class="ss">.'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Iteration 0, intertia 80.69248216214388.
+Iteration 1, intertia 67.91899805018879.
+Iteration 2, intertia 52.70484611171963.
+Iteration 3, intertia 50.868247072045826.
+Iteration 4, intertia 50.70926171516276.</code></pre>
+</div>
+</div>
+<p>Now, for each saved model, we want to make the same plots as before to see how the clusters may change over iterations. We will make use of subplots for this. We simply pull label clusters for each model, and then plot them on scatterplots. We will also plot the centroids to see how they move around.</p>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create figure and subplot axes</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">5</span>, figsize<span class="op">=</span>(<span class="dv">20</span>, <span class="dv">5</span>), dpi<span class="op">=</span><span class="dv">300</span>, sharey <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> idx, (model, ax) <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">zip</span>(models, axes), start<span class="op">=</span><span class="dv">1</span>):</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Create dataframe for plot</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    cluster_data <span class="op">=</span> pd.DataFrame({<span class="st">'Principal Component 1'</span> : component_1,</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">'Principal Component 2'</span> : component_2,</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">'Cluster'</span> : model.labels_})</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Make scatterplot</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>    sns.<span class="bu">set</span>(style<span class="op">=</span><span class="st">'darkgrid'</span>,</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>        font_scale <span class="op">=</span> <span class="fl">1.4</span>)</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>    sns.scatterplot(ax <span class="op">=</span> ax,</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>                    data <span class="op">=</span> cluster_data,</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>                    x <span class="op">=</span> <span class="st">'Principal Component 1'</span>,</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>                    y <span class="op">=</span> <span class="st">'Principal Component 2'</span>,</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>                    hue <span class="op">=</span> <span class="st">'Cluster'</span>,</span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>                    style <span class="op">=</span> <span class="st">'Cluster'</span>,</span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>                    palette<span class="op">=</span><span class="st">'pastel'</span>,</span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>                    s <span class="op">=</span> <span class="dv">150</span>,</span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>                    markers<span class="op">=</span>[<span class="st">'o'</span>, <span class="st">'^'</span>])</span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>    ax.set_title(<span class="ss">f'Iteration </span><span class="sc">{</span>idx<span class="op">-</span><span class="dv">1</span><span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">'PC1'</span>)</span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">'PC2'</span>)</span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a>    ax.legend(loc <span class="op">=</span> <span class="st">'lower right'</span>, title <span class="op">=</span> <span class="st">'Cluster'</span>)</span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> i <span class="op">!=</span> <span class="dv">1</span>:</span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a>        ax.legend().set_visible(<span class="va">False</span>)</span>
+<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Plot Centroids</span></span>
+<span id="cb18-33"><a href="#cb18-33" aria-hidden="true" tabindex="-1"></a>    centroids <span class="op">=</span> pca.transform(model.cluster_centers_)</span>
+<span id="cb18-34"><a href="#cb18-34" aria-hidden="true" tabindex="-1"></a>    ax.scatter(centroids[:, <span class="dv">0</span>],</span>
+<span id="cb18-35"><a href="#cb18-35" aria-hidden="true" tabindex="-1"></a>               centroids[:, <span class="dv">1</span>],</span>
+<span id="cb18-36"><a href="#cb18-36" aria-hidden="true" tabindex="-1"></a>               c<span class="op">=</span><span class="st">'black'</span>,</span>
+<span id="cb18-37"><a href="#cb18-37" aria-hidden="true" tabindex="-1"></a>               marker<span class="op">=</span><span class="st">'X'</span>,</span>
+<span id="cb18-38"><a href="#cb18-38" aria-hidden="true" tabindex="-1"></a>               s<span class="op">=</span><span class="dv">50</span>,</span>
+<span id="cb18-39"><a href="#cb18-39" aria-hidden="true" tabindex="-1"></a>               label<span class="op">=</span><span class="st">'Centroids'</span>)</span>
+<span id="cb18-40"><a href="#cb18-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-41"><a href="#cb18-41" aria-hidden="true" tabindex="-1"></a>fig.suptitle(<span class="st">'Cluster Assignments for Each K-Means Iteration'</span>)</span>
+<span id="cb18-42"><a href="#cb18-42" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb18-43"><a href="#cb18-43" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-15-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>With these plots done, we can take a look at how the centroids slowly move towards each distinct grouping in the dataset. The centroids are marked on each plot with a black X.</p>
+<p>In the iteration 0, the algorithm does not really understand what is going on. It has tried to set initial centroids with the k-means++ sampling method, but those centroids are far from perfect. No worthwhile clustering exists. We can see circles and triangles all mixed up since the algorithm has yet to figure out the best clusters yet. As the we move to next iterations, centroids are re-computed and data points are re-assigned to the nearest centroids. The centroids move further and further towards the left and right (where the groups of body and glaze points exist). At around iteration 2, we are nearing the optimal solution and so the centroids no longer have to move very much. Then, after iteration 3, we seem to have found an optimal solution. After this, no further re-assignments are required. This is why iterations 3 and 4 look exactly the same.</p>
+</section>
+<section id="conclusion" class="level1">
+<h1>Conclusion</h1>
+<p>Conclusively, K-Means has proved to be quite a powerful clustering algorithm, allowing us to cluster ceramic samples by just chemical composition alone. With this new-found knowledge of unsupervised machine learning techniques, we have gained extremely valuable insights into the inherent patterns and structures present within our dataset. The K-Means model’s ability to automatically group our data points based on shared characteristics regarding chemical composition has not only allowed us to identify distinct body and glaze pieces, but also paved the way for further exploration into the field of unsupervised learning.</p>
+<p>With our project, we have shown how machine learning techniques can be applied in fields like archaeology and material sciences. But, machine learning can do so much more! The insights gained here has assisted us in clustering pottery samples, but can also be applied into almost any field of work imaginable. As machine learning continues to develop and we begin integrating newer and more advanced techniques for various tasks, we will all look back on these foundational concepts with appreciation. For now, I will sign off, but for those still around, I hope you learned something and I am excited for whatever the future has in store for you.</p>
+<p>{\__/}<br>
+( • . •)<br>
+/ &gt; &gt;</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Shayne Biagi">
+<meta name="dcterms.date" content="2023-11-08">
+
+<title>Shayne Biagi - Harnessing Probability Theory: Naive Bayes for Classification</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="https://biagishedu.github.io/">
+    <span class="navbar-title">Shayne Biagi</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools ms-auto tools-wide">
+    <a href="https://biagishedu.github.io/" rel="" title="Home" class="quarto-navigation-tool px-1" aria-label="Home"><i class="bi bi-house-fill"></i></a>
+    <a href="../../index.html" rel="" title="Project Archive" class="quarto-navigation-tool px-1" aria-label="Project Archive"><i class="bi bi-archive-fill"></i></a>
+    <a href="https://github.com/biagishEDU" rel="" title="My Github" class="quarto-navigation-tool px-1" aria-label="My Github"><i class="bi bi-github"></i></a>
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Harnessing Probability Theory: Naive Bayes for Classification</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">code</div>
+                <div class="quarto-category">machine learning</div>
+                <div class="quarto-category">probability theory</div>
+                <div class="quarto-category">statistics</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Shayne Biagi </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">November 8, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#probability-theory-and-its-conflicting-schools-of-thought" id="toc-probability-theory-and-its-conflicting-schools-of-thought" class="nav-link active" data-scroll-target="#probability-theory-and-its-conflicting-schools-of-thought">Probability Theory and its Conflicting Schools of Thought</a>
+  <ul class="collapse">
+  <li><a href="#frequentist-school" id="toc-frequentist-school" class="nav-link" data-scroll-target="#frequentist-school">Frequentist School</a></li>
+  <li><a href="#bayesian-school" id="toc-bayesian-school" class="nav-link" data-scroll-target="#bayesian-school">Bayesian School</a></li>
+  </ul></li>
+  <li><a href="#bayes-theorem" id="toc-bayes-theorem" class="nav-link" data-scroll-target="#bayes-theorem">Bayes’ Theorem</a></li>
+  <li><a href="#naive-bayes-bayesian-probabilities-in-machine-learning" id="toc-naive-bayes-bayesian-probabilities-in-machine-learning" class="nav-link" data-scroll-target="#naive-bayes-bayesian-probabilities-in-machine-learning">Naive Bayes: Bayesian Probabilities in Machine Learning</a></li>
+  <li><a href="#starting-our-project-the-data" id="toc-starting-our-project-the-data" class="nav-link" data-scroll-target="#starting-our-project-the-data">Starting our Project: The Data</a></li>
+  <li><a href="#applying-naive-bayes" id="toc-applying-naive-bayes" class="nav-link" data-scroll-target="#applying-naive-bayes">Applying Naive Bayes</a></li>
+  <li><a href="#evaluation" id="toc-evaluation" class="nav-link" data-scroll-target="#evaluation">Evaluation</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p>Probability theory is a branch of mathematics which works to quantify uncertainty and randomness, providing us with a formal framework for expressing and manipulating randomness in various situations. Probability theory as a whole is quite extensive, covering the study of random variables and events as well as the principles governing the likelihood of different outcomes. Applications of probability theory extend from general statistics all the way to machine learning.</p>
+<p>Strap in, because here we will try and navigate the sophisticated interplay between probability theory and modern machine learning algorithms. Although we may only cover a minuscule portion of what probability theory has to offer to us machine learning engineers, I hope that this project can serve to ease you (the reader) into how we can view machine learning problems through the lens of probabilities.</p>
+<p>With this project, we will discuss some foundational concepts within probability theory and work through an example of applying these concepts to machine learning, using a Naive Bayes Classifier model to predict on the renowned Iris dataset. We will unravel the Bayesian approach to probability theory and delve into the inner workings of the Naive Bayes model, identifying why this combination of fields serves as a powerful framework for traditional machine learning tasks.</p>
+<section id="probability-theory-and-its-conflicting-schools-of-thought" class="level1">
+<h1>Probability Theory and its Conflicting Schools of Thought</h1>
+<p>In probability theory, there are various schools of thought which interpret probability in slightly different manners. Some of these include the frequentist approach, the Bayesian approach, and propensity theory. Each interpretation offers a distinct perspective on the nature of probability, and they often argue amongst each other as to which is the correct interpretation. For our purposes, we will cover the two most well-known approaches: frequentist and Bayesian. Please do note, however, that these are not the only interpretations of probability theory which exists.</p>
+<section id="frequentist-school" class="level2">
+<h2 class="anchored" data-anchor-id="frequentist-school">Frequentist School</h2>
+<p>In the frequentist interpretation of probability, probability is defined as the limit of the relative frequency of an event occurring in a large number of trials. Here, probability is seen as an objective property of the physical world. Probability is seen to be based on the idea that as experiments are repeated infinitely, the observed relative frequency of an event converges to its true probability.</p>
+<p>For instance, consider flipping a coin and trying to understand the probability of landing heads with the frequentist approach. According to the frequentist perspective, the probability of getting heads is the limit of the number of heads divided by the total number of flips as we repeat the experiment infinitely. Therefore, if you were to flip a coin a million times, the ratio of heads to total flips would converge to the true probability of landing heads, or at least that’s what frequentists believe.</p>
+</section>
+<section id="bayesian-school" class="level2">
+<h2 class="anchored" data-anchor-id="bayesian-school">Bayesian School</h2>
+<p>Now, the Bayesian interpretation involves both initial beliefs (known as priors) as well as updates to this belief. The revised prior is known as a posterior. The Bayesian interpretation views probability as a measure of belief or confidence in the occurrence of an event. Then, the probability is updated based on prior knowledge along with every new piece of evidence we get. It allows for the incorporation of personal beliefs and uncertainties, making it particularly useful in decision-making under uncertainty.</p>
+<p>So, for the same example of trying to understand the probability of landing heads for a coin flip, the Bayesian thought process would go something like this. Initially, you would simply come up with a probability out of thin air and say something like the probability of landing heads is 0.4. This prior belief can be based on anything. Now, this may seem a bit odd, but, the most important concept here is that this prior should be revised into a posterior based on the new evidence that you gather. So, after a few flips, you would adjust your beliefs with the new data that you gathered. This school of thought proves to be very useful in trying to predict the probability of events which have not occurred yet, such as trying to compute the probability that a brand new sports team will win a championship.</p>
+</section>
+</section>
+<section id="bayes-theorem" class="level1">
+<h1>Bayes’ Theorem</h1>
+<p>Now, the name for the Bayesian approach comes from Rev.&nbsp;Thomas Bayes (as many of you may have guessed). Thomas Bayes was an 18th-century English statistician, philosopher, and Presbyterian minister, best known for formulating Bayes’ theorem. His work laid the foundation for Bayesian statistics, which has become a key approach in modern statistical inference and machine learning.</p>
+<p>Bayes’ theorem describes the probability of an event based on prior knowledge of conditions that might be related to the event. The formula for Bayes’ Theorem follows:</p>
+<p><span class="math inline">\(P(A|B) = \frac{P(B|A) \cdot P(A)}{P(B)}\)</span></p>
+<p>Here, <span class="math inline">\(P(A|B)\)</span> is the probability of event <span class="math inline">\(A\)</span> occurring given that event <span class="math inline">\(B\)</span> has occurred. This is the posterior probability. <span class="math inline">\(P(B|A)\)</span> is the probability of event <span class="math inline">\(B\)</span> occurring given that event <span class="math inline">\(A\)</span> has occurred (the likelihood). And finally, <span class="math inline">\(P(A)\)</span> is the prior probability of event <span class="math inline">\(A\)</span> and <span class="math inline">\(P(B)\)</span> is the probability of event <span class="math inline">\(B\)</span> occurring. So, with the prior probability, we can use the likelihood and new evidence <span class="math inline">\(P(B)\)</span> to compute the posterior (or updated) probability. This theorem allows us to update our beliefs about the probability of an event based on new evidence we gain. And most importantly (for us), we can use it to update probabilities as new data becomes available, enabling a dynamic and iterative approach to statistical inference.</p>
+</section>
+<section id="naive-bayes-bayesian-probabilities-in-machine-learning" class="level1">
+<h1>Naive Bayes: Bayesian Probabilities in Machine Learning</h1>
+<p>Now, enter Naive Bayes, a classification algorithm that seamlessly integrates Bayesian probabilities and machine learning. In the Naive Bayes framework, the algorithm’s decision-making process is driven by Bayes’ theorem, updating probabilities as it encounters new evidence.</p>
+<p>To explain this a bit, let’s consider a simple machine learning classification task: classifying text as spam or not spam (otherwise known as spam or ham). Initially, the algorithm will begin with prior probabilities, and then as the algorithm processes each word in the text body, it would update these probabilities dynamically, refining its understanding with every piece of evidence.</p>
+<p>So what does the Naive part mean? Naive here means that the model assumes all features are independent of each other. In practice this is usually not entirely true, but this model still may return good performance in those situations. This is done in order to simplify the calculations. The algorithm treats each feature as independent, meaning that the presence or absence of a feature does not influence the existence of another feature given the class variable. Without this assumption, the algorithm would need to estimate and consider the joint probabilities of all possible combinations of features, making it extremely computationally expensive (and un-viable at best). This is a trade off between model simplicity and computational efficiency versus the potential impact of the independence assumption on the performance of the model.</p>
+</section>
+<section id="starting-our-project-the-data" class="level1">
+<h1>Starting our Project: The Data</h1>
+<p>Now that we have covered a good bit of background information on probability theory and the Naive Bayes algorithm, we can start looking at the data we will use for this project.</p>
+<p>The Iris dataset is a well-known collection of data commonly used in machine learning and statistics. Most of you may already know about this dataset, but for those who don’t, here is a short description. This dataset was first introduced by British biologist and statistician Sir Ronald A. Fisher in 1936, and consists of measurements from 150 iris flowers. The data represents three different species of the iris flower: setosa, versicolor, and virginica. The species is our target variable for this classification problem. For each flower, four continuous features were recorded:</p>
+<ul>
+<li><p>Sepal Length (cm)</p></li>
+<li><p>Sepal Width (cm)</p></li>
+<li><p>Petal Length (cm)</p></li>
+<li><p>Petal Width (cm)</p></li>
+</ul>
+<p>The dataset has a perfect class balance. It contains 3 classes of 50 instances each. The Iris dataset is available from sklearn. So, let’s begin by loading in our data. Here, we will set <em>as_frame</em> to True in order to get our data as a pandas dataframe.</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Imports</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn <span class="im">import</span> datasets</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># load data</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> datasets.load_iris(as_frame <span class="op">=</span> <span class="va">True</span>).frame</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">sepal length (cm)</th>
+<th data-quarto-table-cell-role="th">sepal width (cm)</th>
+<th data-quarto-table-cell-role="th">petal length (cm)</th>
+<th data-quarto-table-cell-role="th">petal width (cm)</th>
+<th data-quarto-table-cell-role="th">target</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>5.1</td>
+<td>3.5</td>
+<td>1.4</td>
+<td>0.2</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>4.9</td>
+<td>3.0</td>
+<td>1.4</td>
+<td>0.2</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>4.7</td>
+<td>3.2</td>
+<td>1.3</td>
+<td>0.2</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>4.6</td>
+<td>3.1</td>
+<td>1.5</td>
+<td>0.2</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>5.0</td>
+<td>3.6</td>
+<td>1.4</td>
+<td>0.2</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">145</td>
+<td>6.7</td>
+<td>3.0</td>
+<td>5.2</td>
+<td>2.3</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">146</td>
+<td>6.3</td>
+<td>2.5</td>
+<td>5.0</td>
+<td>1.9</td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">147</td>
+<td>6.5</td>
+<td>3.0</td>
+<td>5.2</td>
+<td>2.0</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">148</td>
+<td>6.2</td>
+<td>3.4</td>
+<td>5.4</td>
+<td>2.3</td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">149</td>
+<td>5.9</td>
+<td>3.0</td>
+<td>5.1</td>
+<td>1.8</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+
+<p>150 rows × 5 columns</p>
+</div>
+</div>
+</div>
+<p>We can see that all our features are real-valued, and that our target classes are 0,1, and 2. Here, 0 maps to setosa, 1 to versicolor, and 2 to virginica.</p>
+<p>Right now, we just see a bunch of numbers; it would definitely help if we could visualize our data in some way, so let’s do that. Currently, our feature set has 4 dimensions: sepal length, sepal width, petal length, and petal width. We could pick two of these dimensions and plot them on a Cartesian plane, but that would mean what we would have to manually select them and risk missing out on the information that the other dimensions provide us. So, instead we can use Principal Component Analysis (PCA) for our dimensionality reduction needs. We will run PCA with 2 components, and PCA will find a set of axes in which the data varies the most and then project the data points onto that set of axes. These axes are also known as principal components. Take a look at the image below to see what these principal components may look like.</p>
+<p><img src="./data/pca.png" class="img-fluid"></p>
+<p>First, we will get our X (features) and y (labels). PCA is available from sklearn, so we will make use of that next. This really just consists of us defining a PCA object and then running the fit_transform() method on our features. Afterwards, we will plot the 2 principal components on a simple scatterplot using seaborn, coloring the points by their class.</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Imports</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.decomposition <span class="im">import</span> PCA</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Get X and y</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> datasets.load_iris().data</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> datasets.load_iris().target</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Create PCA object</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>pca <span class="op">=</span> PCA(n_components <span class="op">=</span> <span class="dv">2</span>)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Transform features with pca</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>components <span class="op">=</span> pca.fit_transform(X)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Create dataframe for plot</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(components,</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>                  columns <span class="op">=</span> [<span class="st">'Principal Component 1'</span>, <span class="st">'Principal Component 2'</span>])</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'Species'</span>] <span class="op">=</span> datasets.load_iris().target_names[y]</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Set sns styling</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>sns.<span class="bu">set</span>(style<span class="op">=</span><span class="st">"darkgrid"</span>,</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>        font_scale<span class="op">=</span><span class="fl">1.2</span>)</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Create figure</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>), dpi<span class="op">=</span><span class="dv">300</span>)</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Make Scatterplot</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(data <span class="op">=</span> df,            </span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>                x <span class="op">=</span> <span class="st">'Principal Component 1'</span>,</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>                y <span class="op">=</span> <span class="st">'Principal Component 2'</span>,</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>                hue <span class="op">=</span> <span class="st">'Species'</span>,</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>                style <span class="op">=</span> <span class="st">'Species'</span>,</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>                palette <span class="op">=</span> <span class="st">"pastel"</span>,</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>                s <span class="op">=</span> <span class="dv">150</span>)</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Iris Dataset PCA with 2 Components'</span>)</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-3-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>From this visualization, we can see that the setosa samples appear to be linearly separable from the rest of the dataset. Additionally, it seems to be a bit harder to separate versicolor and virginica samples. They are not heavily mixed however, since versicolor samples appear to the left of the virginica samples and we see that each species is grouped with its own. Because they are not too heavily mixed, it should not be too difficult for our Naive Bayes model to separate the two.</p>
+<p>This visualization is good, but we still do not know much about the characteristics of the features themselves. At this point, all we know is that our data does appear to have some grouping to it. To take a look at each feature independently of the others, we can utilize a violin plot. A violin plot is similar to a box-and-whisker plot and shows the distribution of our data points after grouping them. The violins are drawn using kernel density estimates of the underlying distributions for our groupings. We will plot each feature as its own ‘violin’ to view the feature distributions for each class. This means 1 violin for each feature for each class. Giving us a total of 12 violins. To make this visualization easier to understand, we will stack them vertically in a line using matplotlib subplots. The code below makes this visualization.</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Imports</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Create three dataframes, one for each class</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>setosa_df <span class="op">=</span> data[data[<span class="st">'target'</span>] <span class="op">==</span> <span class="dv">0</span>]</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>versicolor_df <span class="op">=</span> data[data[<span class="st">'target'</span>] <span class="op">==</span> <span class="dv">1</span>]</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>virginica_df <span class="op">=</span> data[data[<span class="st">'target'</span>] <span class="op">==</span> <span class="dv">2</span>]</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Set sns styling</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>sns.<span class="bu">set</span>(style<span class="op">=</span><span class="st">"darkgrid"</span>,</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>        font_scale<span class="op">=</span><span class="fl">1.5</span>)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Create subplots</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(nrows <span class="op">=</span> <span class="dv">3</span>,</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>                         ncols <span class="op">=</span> <span class="dv">1</span>,</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>                         figsize <span class="op">=</span> (<span class="dv">16</span>, <span class="dv">12</span>),</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>                         dpi <span class="op">=</span> <span class="dv">300</span>,</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>                         sharex <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Create violin plots for each feature for each class</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> row, df <span class="kw">in</span> <span class="bu">enumerate</span>([setosa_df, versicolor_df, virginica_df]):</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    sns.violinplot(data <span class="op">=</span> df.iloc[:, :<span class="op">-</span><span class="dv">1</span>],</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>                   ax <span class="op">=</span> axes[row],</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>                   palette<span class="op">=</span><span class="st">'pastel'</span>)</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    axes[row].set_title(<span class="ss">f'</span><span class="sc">{</span>datasets<span class="sc">.</span>load_iris()<span class="sc">.</span>target_names[df.iloc[<span class="dv">0</span>, <span class="op">-</span><span class="dv">1</span>]]<span class="sc">}</span><span class="ss">'</span>.capitalize(),</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>                        y <span class="op">=</span> <span class="fl">0.80</span>)</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>plt.suptitle(<span class="st">'Violin Plots for Features of Each Iris Species'</span>, y <span class="op">=</span> <span class="fl">0.95</span>)</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-4-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>This is a pretty complicated plot, so lets break it down. The shapes of each violin are the estimated distributions for each feature, which are then flipped over to make the whole violin shape. Some key takeaways are how the distributions of each feature change by species. For example, the petal length for setosa are all pretty short (under 2cm), while both versicolor and virginica have petal lengths above 2cm. This is likely why setosa samples were separated away from the others in our PCA plot from earlier. Finally, we can see how petal width for versicolor are less than 2cm while those for virginica range from 0 to around 3cm. There are many other small details we can investigate here, but this is enough to tell us that we (in theory) should be able to build a model which can correctly separate and classify there samples.</p>
+</section>
+<section id="applying-naive-bayes" class="level1">
+<h1>Applying Naive Bayes</h1>
+<p>Now that we have a decent understanding of the structure of our dataset, we can apply our machine learning model to make class predictions. First, however, let’s do a sanity check to make sure that our data does not have any missing data values.</p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check for missing values</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>has_na <span class="op">=</span> data.isna().<span class="bu">any</span>().<span class="bu">any</span>()</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Data contains missing values. :("</span> <span class="cf">if</span> has_na</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>      <span class="cf">else</span> <span class="st">"Data does not have any missing values. :)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Data does not have any missing values. :)</code></pre>
+</div>
+</div>
+<p>Great!</p>
+<p>Another thing to note here is that since we are using a probabilistic model, data scaling is not needed. So, we are essentially done with most of our preprocessing steps. The only thing remaining is to split our data into train and test sets. For this, we will just make use of sklearn’s train_test_split() function. We will use 1/3 of the dataset for testing, while also setting the stratify parameter to ensure that each of the split sets have equal class balances.</p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Split data into train and test sets</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>                                                    y,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>                                                    test_size <span class="op">=</span> <span class="dv">1</span><span class="op">/</span><span class="dv">3</span>,</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>                                                    random_state <span class="op">=</span> <span class="dv">42</span>,</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>                                                    stratify <span class="op">=</span> y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We are now ready for our model. Here, we will be using a specific variant of the traditional Naive Bayes model known as a Gaussian Naive Bayes model. While both are based on the same fundamental principles of Bayes’ Theorem and the assumption of feature independence, they differ in their handling of numerical data. The traditional Naive Bayes model assumes that features are categorical and have a discrete distribution, often modeled by using probability mass functions. Iris, however, does not contain categorical data. Therefore, we will be using the Gaussian Naive Bayes model which assumes that features follow a Gaussian (normal) distribution. Gaussian Naive Bayes models are tailored for datasets with numerical (continuous) features, like we have with the Iris dataset.</p>
+<p>The sklearn package implements a Gaussian Naive Bayes model. We will first create the model and then train it on the training set.</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.naive_bayes <span class="im">import</span> GaussianNB</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create naive bayes model</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>naive_bayes <span class="op">=</span> GaussianNB()</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit naive bayes model on training set</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>naive_bayes.fit(X_train, y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<style>#sk-container-id-1 {color: black;}#sk-container-id-1 pre{padding: 0;}#sk-container-id-1 div.sk-toggleable {background-color: white;}#sk-container-id-1 label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-container-id-1 label.sk-toggleable__label-arrow:before {content: "▸";float: left;margin-right: 0.25em;color: #696969;}#sk-container-id-1 label.sk-toggleable__label-arrow:hover:before {color: black;}#sk-container-id-1 div.sk-estimator:hover label.sk-toggleable__label-arrow:before {color: black;}#sk-container-id-1 div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-container-id-1 div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-container-id-1 input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-container-id-1 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {content: "▾";}#sk-container-id-1 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-1 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-1 input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-container-id-1 div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-container-id-1 div.sk-estimator:hover {background-color: #d4ebff;}#sk-container-id-1 div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-container-id-1 div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-1 div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: 0;}#sk-container-id-1 div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;position: relative;}#sk-container-id-1 div.sk-item {position: relative;z-index: 1;}#sk-container-id-1 div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;position: relative;}#sk-container-id-1 div.sk-item::before, #sk-container-id-1 div.sk-parallel-item::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: -1;}#sk-container-id-1 div.sk-parallel-item {display: flex;flex-direction: column;z-index: 1;position: relative;background-color: white;}#sk-container-id-1 div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-container-id-1 div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-container-id-1 div.sk-parallel-item:only-child::after {width: 0;}#sk-container-id-1 div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;}#sk-container-id-1 div.sk-label label {font-family: monospace;font-weight: bold;display: inline-block;line-height: 1.2em;}#sk-container-id-1 div.sk-label-container {text-align: center;}#sk-container-id-1 div.sk-container {/* jupyter's `normalize.less` sets `[hidden] { display: none; }` but bootstrap.min.css set `[hidden] { display: none !important; }` so we also need the `!important` here to be able to override the default hidden behavior on the sphinx rendered scikit-learn.org. See: https://github.com/scikit-learn/scikit-learn/issues/21755 */display: inline-block !important;position: relative;}#sk-container-id-1 div.sk-text-repr-fallback {display: none;}</style><div id="sk-container-id-1" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>GaussianNB()</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br>On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden=""><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-1" type="checkbox" checked=""><label for="sk-estimator-id-1" class="sk-toggleable__label sk-toggleable__label-arrow">GaussianNB</label><div class="sk-toggleable__content"><pre>GaussianNB()</pre></div></div></div></div></div>
+</div>
+</div>
+<p>Perfect! Our model is now trained and ready for evaluation.</p>
+</section>
+<section id="evaluation" class="level1">
+<h1>Evaluation</h1>
+<p>With our model now trained, let us evaluate it. For classification, a popular way of visualizing a model’s performance is with a confusion matrix. First, however, we need some predictions on the test set.</p>
+<p>So, we will begin by getting the predictions from our model on the testing set. Then, we will compute a confusion matrix with the confusion_matrix() function from sklearn. After that, we will use seaborn’s heatmap to visualize the matrix and then print out an sklearn classification report to get precision, recall, f1-score, and support for our model.</p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Imports</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> confusion_matrix, classification_report</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> naive_bayes.predict(X_test)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Make Confusion Matrix</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>cm <span class="op">=</span> confusion_matrix(y_test, y_pred)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>cm_df <span class="op">=</span> pd.DataFrame(cm,</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>                     index <span class="op">=</span> datasets.load_iris().target_names,</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>                     columns <span class="op">=</span> datasets.load_iris().target_names)</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Display Confusion Matrix</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">6</span>), dpi<span class="op">=</span><span class="dv">300</span>)</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>sns.<span class="bu">set</span>(font_scale <span class="op">=</span> <span class="fl">1.1</span>)</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> sns.heatmap(cm_df, annot<span class="op">=</span><span class="va">True</span>, fmt<span class="op">=</span><span class="st">'d'</span>, linewidths<span class="op">=</span><span class="dv">2</span>, linecolor<span class="op">=</span><span class="st">'#d3d3d3'</span>, cmap<span class="op">=</span><span class="st">'Purples'</span>)</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Gaussian Naive Bayes Classifier Confusion Matrix'</span>)</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"Predicted Label"</span>, fontsize<span class="op">=</span><span class="dv">14</span>, labelpad<span class="op">=</span><span class="dv">20</span>)</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"Actual Label"</span>, fontsize<span class="op">=</span><span class="dv">14</span>, labelpad<span class="op">=</span><span class="dv">20</span>)</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Print classification report</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">' '</span><span class="op">*</span><span class="dv">14</span> <span class="op">+</span> <span class="st">'---Classification Report---'</span>.center(<span class="dv">39</span>))</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(classification_report(y_test, y_pred))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-8-output-1.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                    ---Classification Report---      
+              precision    recall  f1-score   support
+
+           0       1.00      1.00      1.00        16
+           1       0.84      0.94      0.89        17
+           2       0.93      0.82      0.87        17
+
+    accuracy                           0.92        50
+   macro avg       0.93      0.92      0.92        50
+weighted avg       0.92      0.92      0.92        50
+</code></pre>
+</div>
+</div>
+<p>Looks good! So, it seems like our Naive Bayes model was able to predict the iris species pretty well. The model was able to perfectly classify all setosa samples, and only mixed up the versicolor and virginica samples. This aligns with what we saw earlier, where the versicolor and virginica samples ended up being nearby to each other in our PCA visualization. This is also confirmed in our classification report, where class 0 (setosa) saw perfect score across the board, while versicolor and virginica scores ranged between 0.82 and 0.94.</p>
+<p>Despite some confusion in the versicolor and virginica scores, we achieved over 0.9 in the macro averaged precision, recall, and f1-scores. The support here refers to the number of occurrences of each class in our dataset. Overall, our model was 92% accurate in classifying the iris flower species based only on our four features. That’s pretty good!</p>
+</section>
+<section id="conclusion" class="level1">
+<h1>Conclusion</h1>
+<p>Today, we were able to dive into how probability theory and how the Bayesian approach can be applied to machine learning. From covering foundational concepts of probability theory and Bayes’ Theorem to actually applying a probabilistic Naive Bayes model on a real dataset, we have illuminated the synergy between statistical principles and machine learning.</p>
+<p>As we walked through this project while applying a Bayesian perspective and updating beliefs with each sepal and petal measurement in our data, we not only gained a deeper understanding of probability theory but also practical insights on how this understanding can be used for traditional classification tasks.</p>
+<p>As always, I hope you learned something today and urge you to continue learning whenever you can. The world may be complex, but that is why we developed such tools as these to cope. To end this off, enjoy yourself and do not forget that everybody starts somewhere. The basic understandings from today will flourish into a firm grasp on the foundational concepts which make up your future work anywhere. Good luck and goodbye!</p>
+<p>* ／l、<br>
+（ﾟ､ ｡ ７<br>
+　l、 ~ヽ<br>
+　じしf_, )ノ</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

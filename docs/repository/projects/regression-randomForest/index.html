@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Shayne Biagi">
+<meta name="dcterms.date" content="2023-11-10">
+
+<title>Shayne Biagi - Housing Price Forecasting with the Help of Random Forests</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="https://biagishedu.github.io/">
+    <span class="navbar-title">Shayne Biagi</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools ms-auto tools-wide">
+    <a href="https://biagishedu.github.io/" rel="" title="Home" class="quarto-navigation-tool px-1" aria-label="Home"><i class="bi bi-house-fill"></i></a>
+    <a href="../../index.html" rel="" title="Project Archive" class="quarto-navigation-tool px-1" aria-label="Project Archive"><i class="bi bi-archive-fill"></i></a>
+    <a href="https://github.com/biagishEDU" rel="" title="My Github" class="quarto-navigation-tool px-1" aria-label="My Github"><i class="bi bi-github"></i></a>
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Housing Price Forecasting with the Help of Random Forests</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">code</div>
+                <div class="quarto-category">machine learning</div>
+                <div class="quarto-category">regression</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Shayne Biagi </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">November 10, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#the-data" id="toc-the-data" class="nav-link active" data-scroll-target="#the-data">The Data</a></li>
+  <li><a href="#some-exploration" id="toc-some-exploration" class="nav-link" data-scroll-target="#some-exploration">Some Exploration</a></li>
+  <li><a href="#applying-a-random-forest-regressor" id="toc-applying-a-random-forest-regressor" class="nav-link" data-scroll-target="#applying-a-random-forest-regressor">Applying a Random Forest Regressor</a></li>
+  <li><a href="#evaluations" id="toc-evaluations" class="nav-link" data-scroll-target="#evaluations">Evaluations</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p>Housing prices vary significantly year after year and continue to do so throughout multiple generations. Housing prices are notoriously hard to understand. Being affected by a multitude of variables including location, architecture, and even being affected by the national housing market, it is easy to see how complex data analytics in this field can be. Thankfully, continual improvements in the field of machine learning, we are more equipped than ever to tackle many of the complex problems which we have been faced with for many years.</p>
+<p>Throughout this project, we will embark through on a journey through the dynamic realm of the California housing market. Armed with the tools granted to us by machine learning, we will navigate the intricacies of the California Housing dataset and unveil the potential of Random Forests in predicting median housing prices. We will walk through and end-to-end machine learning project, detailing steps from data exploration and preprocessing to the practical application of Random Forests in a regression task.</p>
+<section id="the-data" class="level1">
+<h1>The Data</h1>
+<p>Usually in these types of projects, I would begin with all the imports we will need for the entire project. However, today, let’s take a bit of a detour from our usual route and import the packages as we need them. Hopefully, this will let the post seem more linear, and you (the reader) will not have to jump around anywhere to see packages which are required for a specific step in our project.</p>
+<p>To begin, we will load and take a look at the data we will be using. The data we will be using today is the California Housing dataset (available from sklearn). This dataset is commonly used for testing out regression models. Let’s start by loading it in from the sklearn package. We will set <em>as_frame</em> to True when loading the dataset, so that the data is returned as a pandas dataframe.</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> fetch_california_housing</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># fetch the dataset and store it as a frame</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>cali_housing <span class="op">=</span> fetch_california_housing(as_frame <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">type</span>(cali_housing))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'sklearn.utils._bunch.Bunch'&gt;</code></pre>
+</div>
+</div>
+<p>The fetch_california_housing() function returns an sklearn bunch object which has some nice properties which we can take a look at. In the properties, we have a short description of the dataset we can take a look at. Let’s now print out the description and see what is going on.</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print dataset description</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(cali_housing.DESCR)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>.. _california_housing_dataset:
+
+California Housing dataset
+--------------------------
+
+**Data Set Characteristics:**
+
+    :Number of Instances: 20640
+
+    :Number of Attributes: 8 numeric, predictive attributes and the target
+
+    :Attribute Information:
+        - MedInc        median income in block group
+        - HouseAge      median house age in block group
+        - AveRooms      average number of rooms per household
+        - AveBedrms     average number of bedrooms per household
+        - Population    block group population
+        - AveOccup      average number of household members
+        - Latitude      block group latitude
+        - Longitude     block group longitude
+
+    :Missing Attribute Values: None
+
+This dataset was obtained from the StatLib repository.
+https://www.dcc.fc.up.pt/~ltorgo/Regression/cal_housing.html
+
+The target variable is the median house value for California districts,
+expressed in hundreds of thousands of dollars ($100,000).
+
+This dataset was derived from the 1990 U.S. census, using one row per census
+block group. A block group is the smallest geographical unit for which the U.S.
+Census Bureau publishes sample data (a block group typically has a population
+of 600 to 3,000 people).
+
+A household is a group of people residing within a home. Since the average
+number of rooms and bedrooms in this dataset are provided per household, these
+columns may take surprisingly large values for block groups with few households
+and many empty houses, such as vacation resorts.
+
+It can be downloaded/loaded using the
+:func:`sklearn.datasets.fetch_california_housing` function.
+
+.. topic:: References
+
+    - Pace, R. Kelley and Ronald Barry, Sparse Spatial Autoregressions,
+      Statistics and Probability Letters, 33 (1997) 291-297
+</code></pre>
+</div>
+</div>
+<p>Great! We get some dataset characteristics and even a reference for the dataset.</p>
+<p>This dataset was originally derived from the 1990 U.S. census, with each row detailing the data for a census block group. The dataset contains 20640 total samples, with each sample having 8 numeric attributes (or features). The features detail information such as the median income in a block group or the average number of bedrooms per household. Also, note that, our target variable here is the median house value for California districts. This value is expressed as hundreds of thousands of dollars. So, 3 here would mean $300,000. Since our target variable is continuous, this means that our machine learning task here is regression. Finally, also note that there are no missing values in this dataset (as written in the description). So, we will not have to deal with missing values!</p>
+<p>Now that we know a bit about the dataset, lets take a look at the actual data. The whole dataset can be accessed from our bunch with the <em>.frame</em> property.</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Show full dataframe</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>cali_housing.frame</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">MedInc</th>
+<th data-quarto-table-cell-role="th">HouseAge</th>
+<th data-quarto-table-cell-role="th">AveRooms</th>
+<th data-quarto-table-cell-role="th">AveBedrms</th>
+<th data-quarto-table-cell-role="th">Population</th>
+<th data-quarto-table-cell-role="th">AveOccup</th>
+<th data-quarto-table-cell-role="th">Latitude</th>
+<th data-quarto-table-cell-role="th">Longitude</th>
+<th data-quarto-table-cell-role="th">MedHouseVal</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>8.3252</td>
+<td>41.0</td>
+<td>6.984127</td>
+<td>1.023810</td>
+<td>322.0</td>
+<td>2.555556</td>
+<td>37.88</td>
+<td>-122.23</td>
+<td>4.526</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>8.3014</td>
+<td>21.0</td>
+<td>6.238137</td>
+<td>0.971880</td>
+<td>2401.0</td>
+<td>2.109842</td>
+<td>37.86</td>
+<td>-122.22</td>
+<td>3.585</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>7.2574</td>
+<td>52.0</td>
+<td>8.288136</td>
+<td>1.073446</td>
+<td>496.0</td>
+<td>2.802260</td>
+<td>37.85</td>
+<td>-122.24</td>
+<td>3.521</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>5.6431</td>
+<td>52.0</td>
+<td>5.817352</td>
+<td>1.073059</td>
+<td>558.0</td>
+<td>2.547945</td>
+<td>37.85</td>
+<td>-122.25</td>
+<td>3.413</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>3.8462</td>
+<td>52.0</td>
+<td>6.281853</td>
+<td>1.081081</td>
+<td>565.0</td>
+<td>2.181467</td>
+<td>37.85</td>
+<td>-122.25</td>
+<td>3.422</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">20635</td>
+<td>1.5603</td>
+<td>25.0</td>
+<td>5.045455</td>
+<td>1.133333</td>
+<td>845.0</td>
+<td>2.560606</td>
+<td>39.48</td>
+<td>-121.09</td>
+<td>0.781</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">20636</td>
+<td>2.5568</td>
+<td>18.0</td>
+<td>6.114035</td>
+<td>1.315789</td>
+<td>356.0</td>
+<td>3.122807</td>
+<td>39.49</td>
+<td>-121.21</td>
+<td>0.771</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">20637</td>
+<td>1.7000</td>
+<td>17.0</td>
+<td>5.205543</td>
+<td>1.120092</td>
+<td>1007.0</td>
+<td>2.325635</td>
+<td>39.43</td>
+<td>-121.22</td>
+<td>0.923</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">20638</td>
+<td>1.8672</td>
+<td>18.0</td>
+<td>5.329513</td>
+<td>1.171920</td>
+<td>741.0</td>
+<td>2.123209</td>
+<td>39.43</td>
+<td>-121.32</td>
+<td>0.847</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">20639</td>
+<td>2.3886</td>
+<td>16.0</td>
+<td>5.254717</td>
+<td>1.162264</td>
+<td>1387.0</td>
+<td>2.616981</td>
+<td>39.37</td>
+<td>-121.24</td>
+<td>0.894</td>
+</tr>
+</tbody>
+</table>
+
+<p>20640 rows × 9 columns</p>
+</div>
+</div>
+</div>
+<p>We can now get our features with <em>.data</em> and the target variable with <em>.target</em>. We will store the features as X and the target as y. Also, using <em>.values</em> on each of these will give us a workable numpy array.</p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get features (X) and target (y)</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> cali_housing.data.values</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> cali_housing.target.values</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>So, that pretty much concludes the amount of work required to process our data. Since there are no missing values, there is no work to be done there. Additionally, since we will be making use of a random forest model, no scaling is necessary. In fact, scaling will not really change anything at all (maybe a slightly faster convergence rate, but that’s about it).</p>
+</section>
+<section id="some-exploration" class="level1">
+<h1>Some Exploration</h1>
+<p>With the processing done, we can move into some data exploration. When you go to purchase any home, one of the most important factors to consider is its location. And, in fact, location is usually a large factor in determining the price of the home as well. Thus, it follows that, we can start to assume that the longitude and latitude of a group of homes in California may be an important factor to consider when predicting its price.</p>
+<p>But, this is just an assumption. To check our assumption, we can do a simple scatterplot of our samples using the longitude and latitude attributes. For this, we will first need to import seaborn and matplotlib to make our visualizations. Here, I will also be overlaying the scatterplot on top of a simple outline map of California. This will give us some idea of location. Additionally, when making our seaborn scatterplot, we can change the size and hue of the points according to our target variable (MedHouseValue) to see if the longitude and latitude does actually affect the variable we are trying to predict. The code cell below creates this visualization.</p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Imports</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Set sns styling</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>sns.<span class="bu">set</span>(style<span class="op">=</span><span class="st">"dark"</span>,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>        font_scale<span class="op">=</span><span class="fl">1.5</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Read map png</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>img <span class="op">=</span> plt.imread(<span class="st">'./data/cali_map.png'</span>)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Create figure</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">8</span>), dpi<span class="op">=</span><span class="dv">300</span>)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Show map png</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>plt.imshow(img,</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>           extent<span class="op">=</span>[<span class="bu">min</span>(cali_housing.data[<span class="st">'Longitude'</span>]),</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>                   <span class="bu">max</span>(cali_housing.data[<span class="st">'Longitude'</span>]),</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>                   <span class="bu">min</span>(cali_housing.data[<span class="st">'Latitude'</span>]),</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>                   <span class="bu">max</span>(cali_housing.data[<span class="st">'Latitude'</span>])],</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>           aspect<span class="op">=</span><span class="st">'auto'</span>,</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>           cmap<span class="op">=</span><span class="st">'gray'</span>)</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot longitude and latitude, with size and hue by house value</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>    data<span class="op">=</span>cali_housing.frame,</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span><span class="st">"Longitude"</span>,</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span><span class="st">"Latitude"</span>,</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>    size<span class="op">=</span><span class="st">"MedHouseVal"</span>,</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>    hue<span class="op">=</span><span class="st">"MedHouseVal"</span>,</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>    palette<span class="op">=</span><span class="st">"viridis"</span>,</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>    alpha<span class="op">=</span><span class="fl">0.5</span></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Set legend and title</span></span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>plt.legend(title<span class="op">=</span><span class="st">"MedHouseVal"</span>,</span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>           bbox_to_anchor<span class="op">=</span>(<span class="fl">1.02</span>, <span class="dv">1</span>),</span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>           loc<span class="op">=</span><span class="st">"upper left"</span>)</span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Median House Value By Location in California"</span>)</span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a><span class="co"># Set outside border</span></span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> plt.gca()</span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>ax.spines[<span class="st">'left'</span>].set_color(<span class="st">'black'</span>)</span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>ax.spines[<span class="st">'left'</span>].set_linewidth(<span class="dv">1</span>)</span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>ax.spines[<span class="st">'bottom'</span>].set_color(<span class="st">'black'</span>)</span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>ax.spines[<span class="st">'bottom'</span>].set_linewidth(<span class="dv">1</span>)</span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>ax.spines[<span class="st">'right'</span>].set_color(<span class="st">'black'</span>)</span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>ax.spines[<span class="st">'right'</span>].set_linewidth(<span class="dv">1</span>)</span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>ax.spines[<span class="st">'top'</span>].set_color(<span class="st">'black'</span>)</span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>ax.spines[<span class="st">'top'</span>].set_linewidth(<span class="dv">1</span>)</span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-6-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Taking a look at our visualization, we can confirm our assumption from before. For example, most of the highest valued homes are placed by the coast. If you know anything about the California housing market, this will be no surprise to you. Also, much of the inland empire has a lower median house value. Thus, location is a pretty good predictor of house value. Different median house values are clustered into specific locations around the state of California.</p>
+<p>So, it appears that location (a combination of both longitude and latitude) is pretty heavily correlated with median house value. Let’s now expand our view a bit and start to look at all the other features in our dataset. What other features are also highly correlated with median house value? To answer this, we can make use of a traditional correlation matrix.</p>
+<p>A correlation matrix shows the correlation coefficients (in our case, using pearson correlation) between many variables. Each cell in the matrix represents the correlation between two variables. Here, correlation is a statistical measure which indicates the extent to which two variables change together. In other words, it quantifies the strength and direction of a relationship between the two variables. A correlation positive correlation coefficient means that when one variable increases, so does the other. On the other hand, a negative correlation coefficient means that as one variable increases, the other tends to decrease. Finally, a correlation close to zero indicates a weak (or not any) correlation between the two variables.</p>
+<p>In order to visualize a correlation matrix, we will first have to compute the correlation coefficients between every pair variables in our original dataset. Thankfully, computing a correlation matrix is very easy to do with pandas. We will use pandas’ corr() function on our full dataset to do this.</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute correlation matrix</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>corr_mat <span class="op">=</span> cali_housing.frame.corr()</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>corr_mat</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">MedInc</th>
+<th data-quarto-table-cell-role="th">HouseAge</th>
+<th data-quarto-table-cell-role="th">AveRooms</th>
+<th data-quarto-table-cell-role="th">AveBedrms</th>
+<th data-quarto-table-cell-role="th">Population</th>
+<th data-quarto-table-cell-role="th">AveOccup</th>
+<th data-quarto-table-cell-role="th">Latitude</th>
+<th data-quarto-table-cell-role="th">Longitude</th>
+<th data-quarto-table-cell-role="th">MedHouseVal</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">MedInc</td>
+<td>1.000000</td>
+<td>-0.119034</td>
+<td>0.326895</td>
+<td>-0.062040</td>
+<td>0.004834</td>
+<td>0.018766</td>
+<td>-0.079809</td>
+<td>-0.015176</td>
+<td>0.688075</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">HouseAge</td>
+<td>-0.119034</td>
+<td>1.000000</td>
+<td>-0.153277</td>
+<td>-0.077747</td>
+<td>-0.296244</td>
+<td>0.013191</td>
+<td>0.011173</td>
+<td>-0.108197</td>
+<td>0.105623</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">AveRooms</td>
+<td>0.326895</td>
+<td>-0.153277</td>
+<td>1.000000</td>
+<td>0.847621</td>
+<td>-0.072213</td>
+<td>-0.004852</td>
+<td>0.106389</td>
+<td>-0.027540</td>
+<td>0.151948</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">AveBedrms</td>
+<td>-0.062040</td>
+<td>-0.077747</td>
+<td>0.847621</td>
+<td>1.000000</td>
+<td>-0.066197</td>
+<td>-0.006181</td>
+<td>0.069721</td>
+<td>0.013344</td>
+<td>-0.046701</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Population</td>
+<td>0.004834</td>
+<td>-0.296244</td>
+<td>-0.072213</td>
+<td>-0.066197</td>
+<td>1.000000</td>
+<td>0.069863</td>
+<td>-0.108785</td>
+<td>0.099773</td>
+<td>-0.024650</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">AveOccup</td>
+<td>0.018766</td>
+<td>0.013191</td>
+<td>-0.004852</td>
+<td>-0.006181</td>
+<td>0.069863</td>
+<td>1.000000</td>
+<td>0.002366</td>
+<td>0.002476</td>
+<td>-0.023737</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Latitude</td>
+<td>-0.079809</td>
+<td>0.011173</td>
+<td>0.106389</td>
+<td>0.069721</td>
+<td>-0.108785</td>
+<td>0.002366</td>
+<td>1.000000</td>
+<td>-0.924664</td>
+<td>-0.144160</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Longitude</td>
+<td>-0.015176</td>
+<td>-0.108197</td>
+<td>-0.027540</td>
+<td>0.013344</td>
+<td>0.099773</td>
+<td>0.002476</td>
+<td>-0.924664</td>
+<td>1.000000</td>
+<td>-0.045967</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">MedHouseVal</td>
+<td>0.688075</td>
+<td>0.105623</td>
+<td>0.151948</td>
+<td>-0.046701</td>
+<td>-0.024650</td>
+<td>-0.023737</td>
+<td>-0.144160</td>
+<td>-0.045967</td>
+<td>1.000000</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Taking a look at the matrix, we can see that every cell in the diagonal has a value of 1. This is perfectly expected, as every variable will have a perfect correlation with itself. Additionally, note that cells on opposing sides of the diagonal contain the same values. For instance, the value in cell (MedInc, HouseAge) is the same as the value in cell (HouseAge, MedInc). This is simply due to how the matrix is generated. So, we can easily get away with only visualizing the lower triangle of the matrix, as the upper triangle is exactly the same.</p>
+<p>To visualize the plot, we will again make use of matplotlib as well as seaborn. First, however, we will have to generate a mask for the upper triangle so that we do not show it and make the visualization more confusing than it has to be. This will also get rid of our meaningless diagonal full of 1s. For visualizing the matrix, we will use a heatmap with a diverging color palette. The color palette is best as a diverging one because this will make it easy to pick out positive versus negative correlations in our visualization. We will be using a built-in diverging color palette from seaborn called ‘vlag_r’. This way, positive correlations will be blue with the negatives being red. No correlation cells will be white. The following code cell creates this visualization.</p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Imports</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Set sns styling</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>sns.<span class="bu">set</span>(style<span class="op">=</span><span class="st">"white"</span>,</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>        font_scale<span class="op">=</span><span class="fl">1.5</span>)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a mask for the upper triangle</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>tr_mask <span class="op">=</span> np.triu(np.ones_like(corr_mat, dtype <span class="op">=</span> <span class="bu">bool</span>))</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Create figure</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">8</span>), dpi<span class="op">=</span><span class="dv">300</span>)</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Create viz for corr matrix</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>sns.heatmap(corr_mat,          <span class="co"># Correlation Matrix</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>            mask <span class="op">=</span> tr_mask,    <span class="co"># Mask</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>            cmap <span class="op">=</span> <span class="st">'vlag_r'</span>,   <span class="co"># Color Palette</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>            center <span class="op">=</span> <span class="dv">0</span>,        <span class="co"># Center color palette to 0 value</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>            square <span class="op">=</span> <span class="va">True</span>,     <span class="co"># Set cells to be squares</span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>            linewidths <span class="op">=</span> <span class="dv">1</span>)  <span class="co"># Set line widths</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Set title</span></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Correlation Matrix on California Housing Dataset Variables"</span>)</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-8-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Now, you might be confused as to why latitude and longitude do not show heavy correlations with the median house value after we had that whole section above this. Well, in reality, any change in the actual values for longitude and latitude themselves may not be related to changes in the median house values. In the visualization before, we saw that very specific values for longitude and latitude (those related to coastal areas) were indicative of high house prices. Despite this, increasing latitude or longitude alone, does not directly change the housing prices. In short, this correlation matrix does not tell us the whole story. This is why we are doing it along with the other visualization.. so we can try to see the larger picture. Note that, this does not mean that the latitude and longitude are not important features in predicting median house incomes. Rather, this just tells us that the actual values for these features are not highly correlated with the value for MedHouseVal.</p>
+<p>On another note, one thing we can take away from this visualization is that median income has a high positive correlation with median house value. Thus, as median income increases, so does the median house value. So, we can takeaway the fact that MedInc may be another good predictor of median house value (along with the longitude and latitude from the analysis we did before).</p>
+</section>
+<section id="applying-a-random-forest-regressor" class="level1">
+<h1>Applying a Random Forest Regressor</h1>
+<p>Yes, I know this section is titled “Applying a Random Forest Regressor”, but before that, we should at least know what a random forest model is. A random forest is an ensemble model containing many decision trees. It works by constructing multiple decision trees during training and outputs the average prediction from these trees as its prediction. The ensemble approach helps overcome some over-fitting problems, as it uses not just one model to make its predictions. A decision tree, for those who don’t know, if like a flowchart, where decisions are made by recursively splitting the data into subsets based on a set of inferred rules, ultimately leading to a predicted outcome. A simple decision tree for the XOR function is below:</p>
+<p><img src="./data/XOR_tree.png" class="img-fluid"></p>
+<p>With that out of the way, let’s talk about hyperparameters. A couple of important hyperparameters for a random forest model are: - Number of trees in the ensemble - Number of features to consider when looking for the best split - Maximum depth of a tree</p>
+<p>Along with these there are a multitude of other hyperparameters which you could change to alter the behavior of the Random Forest Model. Changing these may or may not change the model’s performance, but for sake of brevity in this post we will only try and tune the 3 parameters above.</p>
+<p>There are a ton of ways to tune hyperparameters (Bayesian optimization, random search, etc.), but today we will be working with a grid search. Grid search involves defining a grid of hyperparameter values to explore, and then training and evaluating a model with these hyperparameters. This is an exhaustive search over the hyperparameter space that we manually define. We will be using grid search cross validation (GridSearchCV from sklearn) for our purposes. The CV part means that the models will be evaluated with cross-validation. With cross validation, the original dataset is divided into multiple subsets (or folds) and the model is trained and evaluated multiple times using different folds for training and testing. This helps evaluations by reducing the impact of variations due to data splitting.</p>
+<p>To start off, our first step is to split our original data into train and test sets. For this, we will make use of sklearn’s train_test_split() method. We will use 1/4 of our original data for final evaluations. This splitting will ensure that no data leakage has occurred and our model will be properly evaluated on unseen data. Random state is set to make this project reproducible.</p>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Split data into train and test sets</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X,</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>                                                    y,</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>                                                    test_size <span class="op">=</span> <span class="dv">1</span><span class="op">/</span><span class="dv">4</span>,</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>                                                    random_state <span class="op">=</span> <span class="dv">42</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>After this, let’s define our hyperparameter search space. For the number of trees in our ensemble, we can set up a simple geometric series and simply doubling the number each time from 100 to 400. Regarding the number of features to consider when looking for the best split, our maximum is the number of features in our dataset (8). So, let’s define an array from 4 to 8 by 2 for this. Finally, for bounding the maximum depth of a decision tree, we can set the minimum number of samples required to split an internal node. The default is 2, so we will set up list from 2 to 4. Keeping our search space small will let shorten the search time significantly. The downside to this is that may not find the optimal parameters, just the optimal ones for our search space. If you are doing this for a project, I suggest trying to keep the search space as much as possible, but still ensuring that you are nearby the optimal parameters. The code below sets up the parameter grid, for the search space we just decided on.</p>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define hyperparameter space</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>params <span class="op">=</span> {<span class="st">'n_estimators'</span> : [<span class="dv">100</span>, <span class="dv">200</span>, <span class="dv">400</span>],</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>          <span class="st">'max_features'</span> : [<span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">8</span>],</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>          <span class="st">'min_samples_split'</span> : [<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>]}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>With the parameter space now defined, we can run our grid search. For evaluating our predictions, we will use the r2 score. Otherwise known as the coefficient of determination, this score is a measure of how well the regression line approximates the actual data. It is the proportion of the variation in the dependent variable which is predictable from the independent variables. In other words, it evaluates the scatter of the data points around the regression line. The best possible score is 1. We will use 4-fold cross validation here. After we create the grid search object, we will run the fit() function to run the grid search. Please note that running the grid search may take some time. In the meantime, check this out 🐕.</p>
+<p>Here, we will have to import the RandomForestRegressor and GridSearchCV from sklearn.</p>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Imports</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> GridSearchCV</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestRegressor</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Set up grid search</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>grid_search <span class="op">=</span> GridSearchCV(estimator <span class="op">=</span> RandomForestRegressor(),</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>                           param_grid <span class="op">=</span> params,</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>                           verbose <span class="op">=</span> <span class="dv">3</span>,</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>                           cv <span class="op">=</span> <span class="dv">4</span>,</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>                           scoring <span class="op">=</span> <span class="st">'r2'</span>)</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Run grid search</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>grid_search.fit(X_train, y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Fitting 4 folds for each of 27 candidates, totalling 108 fits
+[CV 1/4] END max_features=4, min_samples_split=2, n_estimators=100;, score=0.811 total time=  13.5s
+[CV 2/4] END max_features=4, min_samples_split=2, n_estimators=100;, score=0.802 total time=  13.2s
+[CV 3/4] END max_features=4, min_samples_split=2, n_estimators=100;, score=0.815 total time=  13.2s
+[CV 4/4] END max_features=4, min_samples_split=2, n_estimators=100;, score=0.809 total time=  13.1s
+[CV 1/4] END max_features=4, min_samples_split=2, n_estimators=200;, score=0.811 total time=  26.9s
+[CV 2/4] END max_features=4, min_samples_split=2, n_estimators=200;, score=0.803 total time=  26.4s
+[CV 3/4] END max_features=4, min_samples_split=2, n_estimators=200;, score=0.816 total time=  26.4s
+[CV 4/4] END max_features=4, min_samples_split=2, n_estimators=200;, score=0.808 total time=  26.9s
+[CV 1/4] END max_features=4, min_samples_split=2, n_estimators=400;, score=0.813 total time=  59.9s
+[CV 2/4] END max_features=4, min_samples_split=2, n_estimators=400;, score=0.804 total time=  53.5s
+[CV 3/4] END max_features=4, min_samples_split=2, n_estimators=400;, score=0.817 total time=  53.0s
+[CV 4/4] END max_features=4, min_samples_split=2, n_estimators=400;, score=0.811 total time=  53.4s
+[CV 1/4] END max_features=4, min_samples_split=3, n_estimators=100;, score=0.809 total time=  12.2s
+[CV 2/4] END max_features=4, min_samples_split=3, n_estimators=100;, score=0.803 total time=  12.3s
+[CV 3/4] END max_features=4, min_samples_split=3, n_estimators=100;, score=0.813 total time=  12.4s
+[CV 4/4] END max_features=4, min_samples_split=3, n_estimators=100;, score=0.807 total time=  12.2s
+[CV 1/4] END max_features=4, min_samples_split=3, n_estimators=200;, score=0.812 total time=  24.5s
+[CV 2/4] END max_features=4, min_samples_split=3, n_estimators=200;, score=0.803 total time=  24.8s
+[CV 3/4] END max_features=4, min_samples_split=3, n_estimators=200;, score=0.817 total time=  24.4s
+[CV 4/4] END max_features=4, min_samples_split=3, n_estimators=200;, score=0.809 total time=  24.4s
+[CV 1/4] END max_features=4, min_samples_split=3, n_estimators=400;, score=0.815 total time=  49.4s
+[CV 2/4] END max_features=4, min_samples_split=3, n_estimators=400;, score=0.805 total time=  49.3s
+[CV 3/4] END max_features=4, min_samples_split=3, n_estimators=400;, score=0.816 total time=  49.5s
+[CV 4/4] END max_features=4, min_samples_split=3, n_estimators=400;, score=0.808 total time=  49.0s
+[CV 1/4] END max_features=4, min_samples_split=4, n_estimators=100;, score=0.810 total time=  11.9s
+[CV 2/4] END max_features=4, min_samples_split=4, n_estimators=100;, score=0.803 total time=  11.5s
+[CV 3/4] END max_features=4, min_samples_split=4, n_estimators=100;, score=0.815 total time=  11.6s
+[CV 4/4] END max_features=4, min_samples_split=4, n_estimators=100;, score=0.805 total time=  11.6s
+[CV 1/4] END max_features=4, min_samples_split=4, n_estimators=200;, score=0.813 total time=  23.3s
+[CV 2/4] END max_features=4, min_samples_split=4, n_estimators=200;, score=0.803 total time=  23.7s
+[CV 3/4] END max_features=4, min_samples_split=4, n_estimators=200;, score=0.816 total time=  23.2s
+[CV 4/4] END max_features=4, min_samples_split=4, n_estimators=200;, score=0.809 total time=  23.5s
+[CV 1/4] END max_features=4, min_samples_split=4, n_estimators=400;, score=0.812 total time=  47.0s
+[CV 2/4] END max_features=4, min_samples_split=4, n_estimators=400;, score=0.803 total time=  47.2s
+[CV 3/4] END max_features=4, min_samples_split=4, n_estimators=400;, score=0.817 total time=  47.1s
+[CV 4/4] END max_features=4, min_samples_split=4, n_estimators=400;, score=0.810 total time=  46.5s
+[CV 1/4] END max_features=6, min_samples_split=2, n_estimators=100;, score=0.808 total time=  19.4s
+[CV 2/4] END max_features=6, min_samples_split=2, n_estimators=100;, score=0.798 total time=  18.8s
+[CV 3/4] END max_features=6, min_samples_split=2, n_estimators=100;, score=0.808 total time=  18.9s
+[CV 4/4] END max_features=6, min_samples_split=2, n_estimators=100;, score=0.802 total time=  19.2s
+[CV 1/4] END max_features=6, min_samples_split=2, n_estimators=200;, score=0.809 total time=  38.0s
+[CV 2/4] END max_features=6, min_samples_split=2, n_estimators=200;, score=0.797 total time=  38.3s
+[CV 3/4] END max_features=6, min_samples_split=2, n_estimators=200;, score=0.809 total time=  37.9s
+[CV 4/4] END max_features=6, min_samples_split=2, n_estimators=200;, score=0.804 total time=  38.3s
+[CV 1/4] END max_features=6, min_samples_split=2, n_estimators=400;, score=0.807 total time= 1.3min
+[CV 2/4] END max_features=6, min_samples_split=2, n_estimators=400;, score=0.798 total time= 1.3min
+[CV 3/4] END max_features=6, min_samples_split=2, n_estimators=400;, score=0.812 total time= 1.3min
+[CV 4/4] END max_features=6, min_samples_split=2, n_estimators=400;, score=0.805 total time= 1.3min
+[CV 1/4] END max_features=6, min_samples_split=3, n_estimators=100;, score=0.805 total time=  18.1s
+[CV 2/4] END max_features=6, min_samples_split=3, n_estimators=100;, score=0.796 total time=  17.6s
+[CV 3/4] END max_features=6, min_samples_split=3, n_estimators=100;, score=0.809 total time=  17.8s
+[CV 4/4] END max_features=6, min_samples_split=3, n_estimators=100;, score=0.802 total time=  18.2s
+[CV 1/4] END max_features=6, min_samples_split=3, n_estimators=200;, score=0.806 total time=  35.6s
+[CV 2/4] END max_features=6, min_samples_split=3, n_estimators=200;, score=0.797 total time=  35.9s
+[CV 3/4] END max_features=6, min_samples_split=3, n_estimators=200;, score=0.811 total time=  35.4s
+[CV 4/4] END max_features=6, min_samples_split=3, n_estimators=200;, score=0.803 total time=  35.9s
+[CV 1/4] END max_features=6, min_samples_split=3, n_estimators=400;, score=0.809 total time= 1.2min
+[CV 2/4] END max_features=6, min_samples_split=3, n_estimators=400;, score=0.797 total time= 1.2min
+[CV 3/4] END max_features=6, min_samples_split=3, n_estimators=400;, score=0.811 total time= 1.2min
+[CV 4/4] END max_features=6, min_samples_split=3, n_estimators=400;, score=0.805 total time= 1.2min
+[CV 1/4] END max_features=6, min_samples_split=4, n_estimators=100;, score=0.807 total time=  16.9s
+[CV 2/4] END max_features=6, min_samples_split=4, n_estimators=100;, score=0.796 total time=  17.2s
+[CV 3/4] END max_features=6, min_samples_split=4, n_estimators=100;, score=0.808 total time=  17.0s
+[CV 4/4] END max_features=6, min_samples_split=4, n_estimators=100;, score=0.801 total time=  16.8s
+[CV 1/4] END max_features=6, min_samples_split=4, n_estimators=200;, score=0.808 total time=  34.5s
+[CV 2/4] END max_features=6, min_samples_split=4, n_estimators=200;, score=0.799 total time=  33.8s
+[CV 3/4] END max_features=6, min_samples_split=4, n_estimators=200;, score=0.809 total time=  34.4s
+[CV 4/4] END max_features=6, min_samples_split=4, n_estimators=200;, score=0.803 total time=  33.9s
+[CV 1/4] END max_features=6, min_samples_split=4, n_estimators=400;, score=0.809 total time= 1.1min
+[CV 2/4] END max_features=6, min_samples_split=4, n_estimators=400;, score=0.797 total time= 1.1min
+[CV 3/4] END max_features=6, min_samples_split=4, n_estimators=400;, score=0.811 total time= 1.2min
+[CV 4/4] END max_features=6, min_samples_split=4, n_estimators=400;, score=0.804 total time= 1.1min
+[CV 1/4] END max_features=8, min_samples_split=2, n_estimators=100;, score=0.805 total time=  25.1s
+[CV 2/4] END max_features=8, min_samples_split=2, n_estimators=100;, score=0.793 total time=  24.7s
+[CV 3/4] END max_features=8, min_samples_split=2, n_estimators=100;, score=0.807 total time=  25.0s
+[CV 4/4] END max_features=8, min_samples_split=2, n_estimators=100;, score=0.798 total time=  24.7s
+[CV 1/4] END max_features=8, min_samples_split=2, n_estimators=200;, score=0.806 total time=  50.0s
+[CV 2/4] END max_features=8, min_samples_split=2, n_estimators=200;, score=0.794 total time=  49.7s
+[CV 3/4] END max_features=8, min_samples_split=2, n_estimators=200;, score=0.806 total time=  50.0s
+[CV 4/4] END max_features=8, min_samples_split=2, n_estimators=200;, score=0.800 total time=  49.9s
+[CV 1/4] END max_features=8, min_samples_split=2, n_estimators=400;, score=0.805 total time= 1.7min
+[CV 2/4] END max_features=8, min_samples_split=2, n_estimators=400;, score=0.793 total time= 1.7min
+[CV 3/4] END max_features=8, min_samples_split=2, n_estimators=400;, score=0.808 total time= 1.7min
+[CV 4/4] END max_features=8, min_samples_split=2, n_estimators=400;, score=0.799 total time= 1.7min
+[CV 1/4] END max_features=8, min_samples_split=3, n_estimators=100;, score=0.801 total time=  23.2s
+[CV 2/4] END max_features=8, min_samples_split=3, n_estimators=100;, score=0.790 total time=  23.4s
+[CV 3/4] END max_features=8, min_samples_split=3, n_estimators=100;, score=0.805 total time=  23.1s
+[CV 4/4] END max_features=8, min_samples_split=3, n_estimators=100;, score=0.798 total time=  22.9s
+[CV 1/4] END max_features=8, min_samples_split=3, n_estimators=200;, score=0.804 total time=  46.8s
+[CV 2/4] END max_features=8, min_samples_split=3, n_estimators=200;, score=0.792 total time=  46.8s
+[CV 3/4] END max_features=8, min_samples_split=3, n_estimators=200;, score=0.808 total time=  46.4s
+[CV 4/4] END max_features=8, min_samples_split=3, n_estimators=200;, score=0.801 total time=  46.4s
+[CV 1/4] END max_features=8, min_samples_split=3, n_estimators=400;, score=0.806 total time= 1.6min
+[CV 2/4] END max_features=8, min_samples_split=3, n_estimators=400;, score=0.794 total time= 1.5min
+[CV 3/4] END max_features=8, min_samples_split=3, n_estimators=400;, score=0.808 total time= 1.6min
+[CV 4/4] END max_features=8, min_samples_split=3, n_estimators=400;, score=0.800 total time= 1.6min
+[CV 1/4] END max_features=8, min_samples_split=4, n_estimators=100;, score=0.803 total time=  22.3s
+[CV 2/4] END max_features=8, min_samples_split=4, n_estimators=100;, score=0.792 total time=  22.4s
+[CV 3/4] END max_features=8, min_samples_split=4, n_estimators=100;, score=0.806 total time=  22.1s
+[CV 4/4] END max_features=8, min_samples_split=4, n_estimators=100;, score=0.798 total time=  22.1s
+[CV 1/4] END max_features=8, min_samples_split=4, n_estimators=200;, score=0.804 total time=  45.0s
+[CV 2/4] END max_features=8, min_samples_split=4, n_estimators=200;, score=0.794 total time=  44.6s
+[CV 3/4] END max_features=8, min_samples_split=4, n_estimators=200;, score=0.807 total time=  44.3s
+[CV 4/4] END max_features=8, min_samples_split=4, n_estimators=200;, score=0.798 total time=  44.6s
+[CV 1/4] END max_features=8, min_samples_split=4, n_estimators=400;, score=0.804 total time= 1.5min
+[CV 2/4] END max_features=8, min_samples_split=4, n_estimators=400;, score=0.794 total time= 1.5min
+[CV 3/4] END max_features=8, min_samples_split=4, n_estimators=400;, score=0.807 total time= 1.5min
+[CV 4/4] END max_features=8, min_samples_split=4, n_estimators=400;, score=0.799 total time= 1.5min</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+<style>#sk-container-id-1 {color: black;}#sk-container-id-1 pre{padding: 0;}#sk-container-id-1 div.sk-toggleable {background-color: white;}#sk-container-id-1 label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-container-id-1 label.sk-toggleable__label-arrow:before {content: "▸";float: left;margin-right: 0.25em;color: #696969;}#sk-container-id-1 label.sk-toggleable__label-arrow:hover:before {color: black;}#sk-container-id-1 div.sk-estimator:hover label.sk-toggleable__label-arrow:before {color: black;}#sk-container-id-1 div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-container-id-1 div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-container-id-1 input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-container-id-1 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {content: "▾";}#sk-container-id-1 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-1 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-1 input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-container-id-1 div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-container-id-1 div.sk-estimator:hover {background-color: #d4ebff;}#sk-container-id-1 div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-container-id-1 div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-1 div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: 0;}#sk-container-id-1 div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;position: relative;}#sk-container-id-1 div.sk-item {position: relative;z-index: 1;}#sk-container-id-1 div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;position: relative;}#sk-container-id-1 div.sk-item::before, #sk-container-id-1 div.sk-parallel-item::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: -1;}#sk-container-id-1 div.sk-parallel-item {display: flex;flex-direction: column;z-index: 1;position: relative;background-color: white;}#sk-container-id-1 div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-container-id-1 div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-container-id-1 div.sk-parallel-item:only-child::after {width: 0;}#sk-container-id-1 div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;}#sk-container-id-1 div.sk-label label {font-family: monospace;font-weight: bold;display: inline-block;line-height: 1.2em;}#sk-container-id-1 div.sk-label-container {text-align: center;}#sk-container-id-1 div.sk-container {/* jupyter's `normalize.less` sets `[hidden] { display: none; }` but bootstrap.min.css set `[hidden] { display: none !important; }` so we also need the `!important` here to be able to override the default hidden behavior on the sphinx rendered scikit-learn.org. See: https://github.com/scikit-learn/scikit-learn/issues/21755 */display: inline-block !important;position: relative;}#sk-container-id-1 div.sk-text-repr-fallback {display: none;}</style><div id="sk-container-id-1" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>GridSearchCV(cv=4, estimator=RandomForestRegressor(),
+             param_grid={'max_features': [4, 6, 8],
+                         'min_samples_split': [2, 3, 4],
+                         'n_estimators': [100, 200, 400]},
+             scoring='r2', verbose=3)</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br>On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden=""><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-1" type="checkbox"><label for="sk-estimator-id-1" class="sk-toggleable__label sk-toggleable__label-arrow">GridSearchCV</label><div class="sk-toggleable__content"><pre>GridSearchCV(cv=4, estimator=RandomForestRegressor(),
+             param_grid={'max_features': [4, 6, 8],
+                         'min_samples_split': [2, 3, 4],
+                         'n_estimators': [100, 200, 400]},
+             scoring='r2', verbose=3)</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-2" type="checkbox"><label for="sk-estimator-id-2" class="sk-toggleable__label sk-toggleable__label-arrow">estimator: RandomForestRegressor</label><div class="sk-toggleable__content"><pre>RandomForestRegressor()</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-3" type="checkbox"><label for="sk-estimator-id-3" class="sk-toggleable__label sk-toggleable__label-arrow">RandomForestRegressor</label><div class="sk-toggleable__content"><pre>RandomForestRegressor()</pre></div></div></div></div></div></div></div></div></div></div>
+</div>
+</div>
+<p>Once the grid search is done, we can print the best parameters and the best score. We can also get the model from the grid search which scored the highest. So, let’s do that next.</p>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print out best parameters with best score</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'---Best Parameters From Grid Search---'</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'</span><span class="ch">\n</span><span class="st">'</span>.join([<span class="ss">f'</span><span class="sc">{</span>param<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>value<span class="sc">}</span><span class="ss">'</span> <span class="cf">for</span> param, value <span class="kw">in</span> grid_search.best_params_.items()]))</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'</span><span class="ch">\n</span><span class="st">---Best Score---'</span>)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(grid_search.best_score_)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Save best model</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>best_rf <span class="op">=</span> grid_search.best_estimator_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>---Best Parameters From Grid Search---
+max_features: 4
+min_samples_split: 2
+n_estimators: 400
+
+---Best Score---
+0.8108895538068155</code></pre>
+</div>
+</div>
+</section>
+<section id="evaluations" class="level1">
+<h1>Evaluations</h1>
+<p>From the grid search, we know the best r2 score that we were able to get on the training set. Now, with the best model from the grid search (which is already trained), we can evaluate the model on the testing set that we split off earlier. For the predictions on the test set (X_test), we will compare it with the correct values (y_test). Instead of just scoring the model with the r2 score, let’s compute some other popular regression metrics. Along with the r2 score, we will compute the mean absolute error (MAE) and the root mean squared error (RMSE). MAE is simply the average of the absolute differences between the actual target values and the predicted values. RMSE is the square root of MSE, and MSE is the average squared difference between the target and predicted values. To compute MAE, we can simply use the mean_absolute_error() function from sklearn. For RMSE, we will compute MSE with mean_squared_error() function and then take the square root. So that we don’t have to keep computing and printing metrics, we can create a helper function to do it for us.</p>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Imports</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> r2_score</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_absolute_error</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_squared_error</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> math <span class="im">import</span> sqrt</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Helper function to compute and print regression metrics</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> print_reg_metrics(y_true, y_pred):</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute R2, MAE, and RMSE</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    r2 <span class="op">=</span> r2_score(y_true, y_pred)</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    mae_score <span class="op">=</span> mean_absolute_error(y_true, y_pred)</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    rmse_score <span class="op">=</span> sqrt(mean_squared_error(y_true, y_pred))</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Print Eval Metrics</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'+-----------------------------------+'</span>)</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'|  Evaluation Metrics for Test Set  |'</span>)</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'+-----------------------------------+'</span>)</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'|'</span><span class="op">+</span><span class="ss">f'</span><span class="sc">{</span><span class="st">"R2"</span><span class="sc">: &lt;5}</span><span class="ss">= </span><span class="sc">{</span>r2<span class="sc">: .3f}</span><span class="ss">'</span>.center(<span class="dv">35</span>)<span class="op">+</span><span class="st">'|'</span>)</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'|'</span><span class="op">+</span><span class="ss">f'</span><span class="sc">{</span><span class="st">"MAE"</span><span class="sc">: &lt;5}</span><span class="ss">= </span><span class="sc">{</span>mae_score<span class="sc">: .3f}</span><span class="ss">'</span>.center(<span class="dv">35</span>)<span class="op">+</span><span class="st">'|'</span>)</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'|'</span><span class="op">+</span><span class="ss">f'</span><span class="sc">{</span><span class="st">"RMSE"</span><span class="sc">: &lt;5}</span><span class="ss">= </span><span class="sc">{</span>rmse_score<span class="sc">: .3f}</span><span class="ss">'</span>.center(<span class="dv">35</span>)<span class="op">+</span><span class="st">'|'</span>)</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">'+-----------------------------------+'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now, we will predict on the test set and print out our evaluation metrics with the help of our new function.</p>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get predictions for the test set</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> best_rf.predict(X_test)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Use helper function to compute and print metrics</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>print_reg_metrics(y_test, y_pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>+-----------------------------------+
+|  Evaluation Metrics for Test Set  |
++-----------------------------------+
+|           R2   =  0.816           |
+|           MAE  =  0.322           |
+|           RMSE =  0.494           |
++-----------------------------------+</code></pre>
+</div>
+</div>
+<p>Looks good! Our RMSE tells us that our random forest model explains 81.7% of the variation in the response variable around its mean. Not bad at all! With 0.322 for MAE, we can say that our model predicts a median housing value that is, on average, about $32,200 off of the actual value. For RMSE, we can say that the square root of the variance of the residuals (the differences between the actual values and the predicted values) is 0.493.</p>
+<p>Now, these seem to be pretty good metrics. But, how does our model compare to some other form of regression technique? To find out, we can create a simple linear regression model as a baseline and then compare our evaluation metrics (this is why I decided to make that helper function lol). sklearn implements a linear regression model, so we will make use of that.</p>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Imports</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create linear model and train</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>linear_model <span class="op">=</span> LinearRegression()</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>linear_model.fit(X_train, y_train)</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict on the test set</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> linear_model.predict(X_test)</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Print eval metrics</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>print_reg_metrics(y_test, y_pred)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>+-----------------------------------+
+|  Evaluation Metrics for Test Set  |
++-----------------------------------+
+|           R2   =  0.591           |
+|           MAE  =  0.530           |
+|           RMSE =  0.736           |
++-----------------------------------+</code></pre>
+</div>
+</div>
+<p>Well, as you probably expected, the random forest model far outclasses a simple linear regression model for this task. The r2 score is about 20% less. Both errors are also around 20% greater when using the linear regression.</p>
+<p>This is likely because there is some more complex, or non-linear, relationships which the random forest was able to learn but the linear regression was not. All in all, using a more complex model was beneficial here. However, it may not always be, so be sure to understand the data and try multiple models out with your own projects.</p>
+</section>
+<section id="conclusion" class="level1">
+<h1>Conclusion</h1>
+<p>Today in this post, we have walked through how you could go about applying a random forest model for a regression problem. We dove into some data exploration and visualizations, some hyperparameter tuning, and even pitted our model against a baseline to assess performance.</p>
+<p>To end this post off, our journey through the application of a random forest regressor model on the California Housing dataset has been both insightful and practical. We navigated the intricacies of every step in a typical machine learning project and navigated the intricacies of this simple, but powerful, ensemble-based model. By applying this model, we were able to unlock the potential for making accurate predictions with a dataset containing some pretty complex feature relationships. The ensemble nature of our model has proven its viability in classic regression tasks due to its resilience against over-fitting and ability to capture intricate patterns within the data. As we continue in our lives, away from this post equipped with new found knowledge, you and I are both better equipped to unravel the complexities of predictive modeling and contribute to this weird new realm we call machine learning. If you ever wanted to learn more about a topic, try and write a blog post about it. Although this is written for educational purposes (if anyone is able to find it), I have learned a ton while writing here. Hopefully, you were able to follow along easily with this project and are now more learned than you were before. To sign off once again, have fun out there kid. The world is tough, but you are tougher.</p>
+<p>₍ᐢ•ᴥ•ᐢ₎</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

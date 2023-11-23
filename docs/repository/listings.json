@@ -1,0 +1,20 @@
+[
+  {
+    "listing": "/index.html",
+    "items": [
+      "/projects/regression-randomForest/index.html",
+      "/projects/probabilityTheory-naiveBayes/index.html",
+      "/projects/clustering-ceramics/index.html",
+      "/projects/classification-slp/index.html",
+      "/projects/anomalyDetection-malware/index.html",
+      "/projects/VAE-Generation/index.html",
+      "/projects/governmentSurveillance/index.html",
+      "/projects/wGAN-stock-predictions/index.html",
+      "/projects/OT-pushRelabel/index.html",
+      "/projects/OT-graphTheoretical/index.html",
+      "/projects/OT-applications/index.html",
+      "/projects/OT-survey/index.html",
+      "/projects/pandoc-guide/index.html"
+    ]
+  }
+]
